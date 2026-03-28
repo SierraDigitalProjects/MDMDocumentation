@@ -1,0 +1,2226 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Sierra MDM Platform — Architecture and Requirements">
+      
+      
+        <meta name="author" content="Sierra MDM Team">
+      
+      
+      
+        <link rel="prev" href="../spring-boot/">
+      
+      
+        <link rel="next" href="../kubernetes/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>CPI iFlows & Groovy Scripts - Sierra MDM Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cpi-iflow-designs-and-groovy-scripts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sierra MDM Platform" class="md-header__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sierra MDM Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CPI iFlows & Groovy Scripts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sierra MDM Platform" class="md-nav__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sierra MDM Platform
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../goals-objectives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Goals & Objectives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benefits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benefits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assumptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assumptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scope
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Data Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/centrally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Centrally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/locally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Locally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/not-in-sap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Not Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Requirements
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Requirements
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/non-functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Non-Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/open-questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDM Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MDM Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/lead-system-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lead System Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/integration-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rbac-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RBAC and Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/data-enrichment-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Enrichment Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/compute-options/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compute Options (Kyma vs AKS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/event-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Broker (AEM vs Kafka)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/data-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Layer (MongoDB & Redis)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/cost/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost of Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI in MDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spring-boot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Boot (MDM Core API)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPI iFlows & Groovy Scripts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPI iFlows & Groovy Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#iflow-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iFlow Inventory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inbound-s4hana-business-partner-mdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inbound: S/4HANA Business Partner → MDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Inbound: S/4HANA Business Partner → MDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-3-s4hana-bp-mdm-customer-transform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — S/4HANA BP → MDM Customer Transform
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xsuaa-token-fetch-groovy-reuse-across-all-iflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XSUAA Token Fetch (Groovy — reuse across all iFlows)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outbound-real-time-mdm-crm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outbound Real-Time: MDM → CRM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outbound Real-Time: MDM → CRM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-2-field-interest-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Field Interest Filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-mdm-crm-format-transform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — MDM → CRM Format Transform
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outbound-scheduled-batch-mdm-erp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outbound Scheduled Batch: MDM → ERP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outbound Scheduled Batch: MDM → ERP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-4-deduplicate-by-object-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Deduplicate by Object ID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-mdm-cremas-idoc-transform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6 — MDM → CREMAS IDoc Transform
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpi-secure-parameter-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPI Secure Parameter Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kubernetes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes & Kyma Manifests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#iflow-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        iFlow Inventory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inbound-s4hana-business-partner-mdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inbound: S/4HANA Business Partner → MDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Inbound: S/4HANA Business Partner → MDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-3-s4hana-bp-mdm-customer-transform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — S/4HANA BP → MDM Customer Transform
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xsuaa-token-fetch-groovy-reuse-across-all-iflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XSUAA Token Fetch (Groovy — reuse across all iFlows)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outbound-real-time-mdm-crm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outbound Real-Time: MDM → CRM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outbound Real-Time: MDM → CRM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-2-field-interest-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — Field Interest Filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-mdm-crm-format-transform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — MDM → CRM Format Transform
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#outbound-scheduled-batch-mdm-erp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Outbound Scheduled Batch: MDM → ERP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Outbound Scheduled Batch: MDM → ERP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-4-deduplicate-by-object-id" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4 — Deduplicate by Object ID
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-mdm-cremas-idoc-transform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6 — MDM → CREMAS IDoc Transform
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpi-secure-parameter-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPI Secure Parameter Configuration
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cpi-iflow-designs-and-groovy-scripts">CPI iFlow Designs and Groovy Scripts<a class="headerlink" href="#cpi-iflow-designs-and-groovy-scripts" title="Permanent link">&para;</a></h1>
+<h2 id="iflow-inventory">iFlow Inventory<a class="headerlink" href="#iflow-inventory" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>iFlow Name</th>
+<th>Direction</th>
+<th>Pattern</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>S4_BusinessPartner_To_MDM_Customer</code></td>
+<td>S/4HANA → MDM</td>
+<td>Inbound REST</td>
+<td>IDoc / OData push from S4</td>
+</tr>
+<tr>
+<td><code>MDM_Customer_To_CRM_Realtime</code></td>
+<td>MDM → CRM</td>
+<td>Outbound real-time</td>
+<td>AEM queue event</td>
+</tr>
+<tr>
+<td><code>MDM_Vendor_To_ERP_NightlyBatch</code></td>
+<td>MDM → ERP</td>
+<td>Outbound scheduled</td>
+<td>Timer (02:00 daily)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="inbound-s4hana-business-partner-mdm">Inbound: S/4HANA Business Partner → MDM<a class="headerlink" href="#inbound-s4hana-business-partner-mdm" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>┌──────────────────────────────────────────────────────────────┐
+│  iFlow: S4_BusinessPartner_To_MDM_Customer                   │
+│                                                              │
+│  [1] SOAP/IDoc Receiver                                      │
+│      S4HANA pushes DEBMAS IDoc or OData BusinessPartner      │
+│       │                                                      │
+│  [2] Message Validator                                       │
+│      Validate mandatory fields present                       │
+│       │                                                      │
+│  [3] Groovy: Extract &amp; Transform                             │
+│      Map BP fields → MDM Customer JSON                       │
+│       │                                                      │
+│  [4] Request Reply: GET /api/v1/objects/{bpNumber}           │
+│      Check if object already exists (create vs update)       │
+│       │                                                      │
+│  [5] Router: exists?                                         │
+│      ├── YES → [6a] PUT /api/v1/objects/{id}                 │
+│      └── NO  → [6b] POST /api/v1/objects                     │
+│       │                                                      │
+│  [7] Exception Handler                                       │
+│      On error → route to AEM dead-letter queue               │
+│       │                                                      │
+│  [8] Success Logger                                          │
+└──────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="step-3-s4hana-bp-mdm-customer-transform">Step 3 — S/4HANA BP → MDM Customer Transform<a class="headerlink" href="#step-3-s4hana-bp-mdm-customer-transform" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">groovy.json.JsonSlurper</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">groovy.json.JsonOutput</span>
+
+<span class="kt">def</span><span class="w"> </span><span class="n">Message</span><span class="w"> </span><span class="nf">processData</span><span class="o">(</span><span class="n">Message</span><span class="w"> </span><span class="n">message</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">bp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JsonSlurper</span><span class="o">().</span><span class="na">parseText</span><span class="o">(</span><span class="n">message</span><span class="o">.</span><span class="na">getBody</span><span class="o">(</span><span class="n">String</span><span class="o">))</span>
+
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">mdmCustomer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="nl">objectType:</span><span class="w"> </span><span class="s2">&quot;Customer&quot;</span><span class="o">,</span>
+<span class="w">        </span><span class="nl">coreAttributes:</span><span class="w"> </span><span class="o">[</span>
+<span class="w">            </span><span class="nl">businessPartnerId:</span><span class="w"> </span><span class="n">bp</span><span class="o">.</span><span class="na">BusinessPartner</span><span class="o">,</span>
+<span class="w">            </span><span class="n">name</span><span class="w">             </span><span class="o">:</span><span class="w"> </span><span class="n">bp</span><span class="o">.</span><span class="na">BusinessPartnerFullName</span><span class="o">,</span>
+<span class="w">            </span><span class="n">category</span><span class="w">         </span><span class="o">:</span><span class="w"> </span><span class="n">bp</span><span class="o">.</span><span class="na">BusinessPartnerCategory</span><span class="o">,</span><span class="w"> </span><span class="c1">// 1=Person, 2=Org</span>
+<span class="w">            </span><span class="n">country</span><span class="w">          </span><span class="o">:</span><span class="w"> </span><span class="n">bp</span><span class="o">.</span><span class="na">to_BusinessPartnerAddress</span><span class="o">?.</span><span class="na">results</span><span class="o">?.</span><span class="na">getAt</span><span class="o">(</span><span class="mi">0</span><span class="o">)?.</span><span class="na">Country</span><span class="o">,</span>
+<span class="w">            </span><span class="n">street</span><span class="w">           </span><span class="o">:</span><span class="w"> </span><span class="n">bp</span><span class="o">.</span><span class="na">to_BusinessPartnerAddress</span><span class="o">?.</span><span class="na">results</span><span class="o">?.</span><span class="na">getAt</span><span class="o">(</span><span class="mi">0</span><span class="o">)?.</span><span class="na">StreetName</span><span class="o">,</span>
+<span class="w">            </span><span class="n">city</span><span class="w">             </span><span class="o">:</span><span class="w"> </span><span class="n">bp</span><span class="o">.</span><span class="na">to_BusinessPartnerAddress</span><span class="o">?.</span><span class="na">results</span><span class="o">?.</span><span class="na">getAt</span><span class="o">(</span><span class="mi">0</span><span class="o">)?.</span><span class="na">CityName</span><span class="o">,</span>
+<span class="w">            </span><span class="n">postalCode</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="n">bp</span><span class="o">.</span><span class="na">to_BusinessPartnerAddress</span><span class="o">?.</span><span class="na">results</span><span class="o">?.</span><span class="na">getAt</span><span class="o">(</span><span class="mi">0</span><span class="o">)?.</span><span class="na">PostalCode</span><span class="o">,</span>
+<span class="w">            </span><span class="n">language</span><span class="w">         </span><span class="o">:</span><span class="w"> </span><span class="n">bp</span><span class="o">.</span><span class="na">Language</span><span class="o">,</span>
+<span class="w">            </span><span class="n">searchTerm</span><span class="w">       </span><span class="o">:</span><span class="w"> </span><span class="n">bp</span><span class="o">.</span><span class="na">SearchTerm1</span>
+<span class="w">        </span><span class="o">],</span>
+<span class="w">        </span><span class="nl">metadata:</span><span class="w"> </span><span class="o">[</span>
+<span class="w">            </span><span class="nl">leadSystem:</span><span class="w"> </span><span class="s2">&quot;S4HANA&quot;</span>
+<span class="w">        </span><span class="o">]</span>
+<span class="w">    </span><span class="o">]</span>
+
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setBody</span><span class="o">(</span><span class="n">JsonOutput</span><span class="o">.</span><span class="na">toJson</span><span class="o">(</span><span class="n">mdmCustomer</span><span class="o">))</span>
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;application/json&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">message</span>
+<span class="o">}</span>
+</code></pre></div>
+<h3 id="xsuaa-token-fetch-groovy-reuse-across-all-iflows">XSUAA Token Fetch (Groovy — reuse across all iFlows)<a class="headerlink" href="#xsuaa-token-fetch-groovy-reuse-across-all-iflows" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kt">def</span><span class="w"> </span><span class="n">Message</span><span class="w"> </span><span class="nf">fetchToken</span><span class="o">(</span><span class="n">Message</span><span class="w"> </span><span class="n">message</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">tokenUrl</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="o">.</span><span class="na">getProperties</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s2">&quot;XSUAA_TOKEN_URL&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">clientId</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="o">.</span><span class="na">getProperties</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s2">&quot;MDM_CLIENT_ID&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">clientSecret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">message</span><span class="o">.</span><span class="na">getProperties</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s2">&quot;MDM_CLIENT_SECRET&quot;</span><span class="o">)</span>
+
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">URL</span><span class="o">(</span><span class="n">tokenUrl</span><span class="o">).</span><span class="na">openConnection</span><span class="o">()</span>
+<span class="w">    </span><span class="n">http</span><span class="o">.</span><span class="na">requestMethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;POST&quot;</span>
+<span class="w">    </span><span class="n">http</span><span class="o">.</span><span class="na">setRequestProperty</span><span class="o">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;application/x-www-form-urlencoded&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">http</span><span class="o">.</span><span class="na">doOutput</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="n">http</span><span class="o">.</span><span class="na">outputStream</span><span class="o">.</span><span class="na">write</span><span class="o">(</span>
+<span class="w">        </span><span class="s2">&quot;grant_type=client_credentials&amp;client_id=${clientId}&amp;client_secret=${clientSecret}&quot;</span><span class="o">.</span><span class="na">bytes</span>
+<span class="w">    </span><span class="o">)</span>
+
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">groovy</span><span class="o">.</span><span class="na">json</span><span class="o">.</span><span class="na">JsonSlurper</span><span class="o">().</span><span class="na">parse</span><span class="o">(</span><span class="n">http</span><span class="o">.</span><span class="na">inputStream</span><span class="o">)</span>
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s2">&quot;MDM_ACCESS_TOKEN&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;Bearer ${response.access_token}&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">message</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr />
+<h2 id="outbound-real-time-mdm-crm">Outbound Real-Time: MDM → CRM<a class="headerlink" href="#outbound-real-time-mdm-crm" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>┌──────────────────────────────────────────────────────────────┐
+│  iFlow: MDM_Customer_To_CRM_Realtime                         │
+│                                                              │
+│  [1] AMQP Receiver                                           │
+│      Queue: mdm.crm.customer.realtime.queue                  │
+│       │                                                      │
+│  [2] Groovy: Field Interest Filter                           │
+│      If no CRM-relevant fields changed → SKIP                │
+│       │                                                      │
+│  [3] Router: SKIP?                                           │
+│      ├── YES → End (discard)                                 │
+│      └── NO  ↓                                               │
+│  [4] Groovy: Transform MDM → CRM format                      │
+│       │                                                      │
+│  [5] HTTP Receiver → CRM REST API                            │
+│      POST /crm/api/accounts  (OAuth2 client credentials)     │
+│       │                                                      │
+│  [6] Exception Handler                                       │
+│      Retry 3x exponential backoff → AEM DLQ after max retry  │
+│       │                                                      │
+│  [7] Acknowledge AMQP message                                │
+└──────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="step-2-field-interest-filter">Step 2 — Field Interest Filter<a class="headerlink" href="#step-2-field-interest-filter" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kt">def</span><span class="w"> </span><span class="n">Message</span><span class="w"> </span><span class="nf">filterByFieldInterest</span><span class="o">(</span><span class="n">Message</span><span class="w"> </span><span class="n">message</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">groovy</span><span class="o">.</span><span class="na">json</span><span class="o">.</span><span class="na">JsonSlurper</span><span class="o">().</span><span class="na">parseText</span><span class="o">(</span><span class="n">message</span><span class="o">.</span><span class="na">getBody</span><span class="o">(</span><span class="n">String</span><span class="o">))</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">crmInterestedFields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="s2">&quot;coreAttributes.name&quot;</span><span class="o">,</span>
+<span class="w">        </span><span class="s2">&quot;coreAttributes.country&quot;</span><span class="o">,</span>
+<span class="w">        </span><span class="s2">&quot;coreAttributes.email&quot;</span><span class="o">,</span>
+<span class="w">        </span><span class="s2">&quot;extensions.CRM.tier&quot;</span><span class="o">,</span>
+<span class="w">        </span><span class="s2">&quot;extensions.CRM.accountManager&quot;</span>
+<span class="w">    </span><span class="o">]</span>
+
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">changedFields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">body</span><span class="o">.</span><span class="na">changedFields</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span>
+
+<span class="w">    </span><span class="c1">// Always deliver on create (changedFields is null)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">(</span><span class="n">changedFields</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">null</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">message</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s2">&quot;SKIP&quot;</span><span class="o">,</span><span class="w"> </span><span class="kc">false</span><span class="o">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">message</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">hasRelevantChange</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">changedFields</span><span class="o">.</span><span class="na">any</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">cf</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">        </span><span class="n">crmInterestedFields</span><span class="o">.</span><span class="na">any</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">interest</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">cf</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">interest</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">cf</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="n">interest</span><span class="o">)</span><span class="w"> </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s2">&quot;SKIP&quot;</span><span class="o">,</span><span class="w"> </span><span class="o">!</span><span class="n">hasRelevantChange</span><span class="o">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">message</span>
+<span class="o">}</span>
+</code></pre></div>
+<h3 id="step-4-mdm-crm-format-transform">Step 4 — MDM → CRM Format Transform<a class="headerlink" href="#step-4-mdm-crm-format-transform" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kt">def</span><span class="w"> </span><span class="n">Message</span><span class="w"> </span><span class="nf">transformToCrm</span><span class="o">(</span><span class="n">Message</span><span class="w"> </span><span class="n">message</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">mdm</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">groovy</span><span class="o">.</span><span class="na">json</span><span class="o">.</span><span class="na">JsonSlurper</span><span class="o">().</span><span class="na">parseText</span><span class="o">(</span><span class="n">message</span><span class="o">.</span><span class="na">getBody</span><span class="o">(</span><span class="n">String</span><span class="o">))</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">core</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mdm</span><span class="o">.</span><span class="na">payload</span><span class="o">.</span><span class="na">coreAttributes</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">ext</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">mdm</span><span class="o">.</span><span class="na">payload</span><span class="o">.</span><span class="na">extensions</span><span class="o">?.</span><span class="na">CRM</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="o">[:]</span>
+
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">crmAccount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span>
+<span class="w">        </span><span class="n">externalId</span><span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="n">mdm</span><span class="o">.</span><span class="na">objectId</span><span class="o">,</span>
+<span class="w">        </span><span class="n">mdmVersion</span><span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="n">mdm</span><span class="o">.</span><span class="na">version</span><span class="o">,</span>
+<span class="w">        </span><span class="n">accountName</span><span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">core</span><span class="o">.</span><span class="na">name</span><span class="o">,</span>
+<span class="w">        </span><span class="n">country</span><span class="w">      </span><span class="o">:</span><span class="w"> </span><span class="n">core</span><span class="o">.</span><span class="na">country</span><span class="o">,</span>
+<span class="w">        </span><span class="n">accountTier</span><span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">ext</span><span class="o">.</span><span class="na">tier</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="s2">&quot;Standard&quot;</span><span class="o">,</span>
+<span class="w">        </span><span class="n">accountOwner</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ext</span><span class="o">.</span><span class="na">accountManager</span><span class="o">,</span>
+<span class="w">        </span><span class="n">lastSyncedAt</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">mdm</span><span class="o">.</span><span class="na">occurredAt</span>
+<span class="w">    </span><span class="o">]</span>
+
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setBody</span><span class="o">(</span><span class="k">new</span><span class="w"> </span><span class="n">groovy</span><span class="o">.</span><span class="na">json</span><span class="o">.</span><span class="na">JsonOutput</span><span class="o">().</span><span class="na">toJson</span><span class="o">(</span><span class="n">crmAccount</span><span class="o">))</span>
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;application/json&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s2">&quot;X-MDM-Event-Id&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">mdm</span><span class="o">.</span><span class="na">eventId</span><span class="o">)</span>
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s2">&quot;X-MDM-Correlation-Id&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">mdm</span><span class="o">.</span><span class="na">correlationId</span><span class="o">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">message</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr />
+<h2 id="outbound-scheduled-batch-mdm-erp">Outbound Scheduled Batch: MDM → ERP<a class="headerlink" href="#outbound-scheduled-batch-mdm-erp" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>┌──────────────────────────────────────────────────────────────┐
+│  iFlow: MDM_Vendor_To_ERP_NightlyBatch                       │
+│                                                              │
+│  [1] Timer Start Event                                       │
+│      Cron: 0 2 * * *  (02:00 daily, configurable)           │
+│       │                                                      │
+│  [2] AMQP Receiver — Drain Queue                             │
+│      Queue: mdm.erp.vendor.scheduled.queue                   │
+│      Max: 10,000 messages per run                            │
+│      Timeout: 30s (stop when queue empty)                    │
+│       │                                                      │
+│  [3] Aggregator                                              │
+│      Collect all messages into one batch                     │
+│       │                                                      │
+│  [4] Groovy: Deduplicate by objectId                         │
+│      Keep only latest version per vendor ID                  │
+│       │                                                      │
+│  [5] Splitter                                                │
+│      Split batch into chunks of 100                          │
+│       │                                                      │
+│  [6] Groovy: Transform MDM → IDoc CREMAS format              │
+│       │                                                      │
+│  [7] IDoc Receiver → ERP via BTP Connectivity                │
+│      Adapter: IDoc  MessageType: CREMAS05                    │
+│       │                                                      │
+│  [8] Exception Handler                                       │
+│      Failed chunk → AEM DLQ + SAP Alert Notification         │
+│       │                                                      │
+│  [9] Batch Summary Logger                                    │
+└──────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="step-4-deduplicate-by-object-id">Step 4 — Deduplicate by Object ID<a class="headerlink" href="#step-4-deduplicate-by-object-id" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">groovy.json.JsonSlurper</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">groovy.json.JsonOutput</span>
+
+<span class="kt">def</span><span class="w"> </span><span class="n">Message</span><span class="w"> </span><span class="nf">deduplicateByObjectId</span><span class="o">(</span><span class="n">Message</span><span class="w"> </span><span class="n">message</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">messages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">JsonSlurper</span><span class="o">().</span><span class="na">parseText</span><span class="o">(</span><span class="n">message</span><span class="o">.</span><span class="na">getBody</span><span class="o">(</span><span class="n">String</span><span class="o">))</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">List</span>
+
+<span class="w">    </span><span class="c1">// Keep only the highest version per objectId</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">deduped</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">messages</span>
+<span class="w">        </span><span class="o">.</span><span class="na">groupBy</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">it</span><span class="o">.</span><span class="na">objectId</span><span class="w"> </span><span class="o">}</span>
+<span class="w">        </span><span class="o">.</span><span class="na">collect</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">id</span><span class="o">,</span><span class="w"> </span><span class="n">versions</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">versions</span><span class="o">.</span><span class="na">max</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">it</span><span class="o">.</span><span class="na">version</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="o">}</span>
+
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s2">&quot;DEDUP_SKIPPED&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">messages</span><span class="o">.</span><span class="na">size</span><span class="o">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">deduped</span><span class="o">.</span><span class="na">size</span><span class="o">())</span>
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setBody</span><span class="o">(</span><span class="n">JsonOutput</span><span class="o">.</span><span class="na">toJson</span><span class="o">(</span><span class="n">deduped</span><span class="o">))</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">message</span>
+<span class="o">}</span>
+</code></pre></div>
+<h3 id="step-6-mdm-cremas-idoc-transform">Step 6 — MDM → CREMAS IDoc Transform<a class="headerlink" href="#step-6-mdm-cremas-idoc-transform" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kt">def</span><span class="w"> </span><span class="n">Message</span><span class="w"> </span><span class="nf">transformToCremas</span><span class="o">(</span><span class="n">Message</span><span class="w"> </span><span class="n">message</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">vendors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">groovy</span><span class="o">.</span><span class="na">json</span><span class="o">.</span><span class="na">JsonSlurper</span><span class="o">().</span><span class="na">parseText</span><span class="o">(</span><span class="n">message</span><span class="o">.</span><span class="na">getBody</span><span class="o">(</span><span class="n">String</span><span class="o">))</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">List</span>
+
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">StringWriter</span><span class="o">()</span>
+<span class="w">    </span><span class="kt">def</span><span class="w"> </span><span class="n">idoc</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">groovy</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">MarkupBuilder</span><span class="o">(</span><span class="n">writer</span><span class="o">)</span>
+
+<span class="w">    </span><span class="n">idoc</span><span class="o">.</span><span class="na">CREMAS05</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">IDOC</span><span class="o">(</span><span class="nl">BEGIN:</span><span class="w"> </span><span class="s2">&quot;1&quot;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">vendors</span><span class="o">.</span><span class="na">each</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">                </span><span class="kt">def</span><span class="w"> </span><span class="n">core</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="o">.</span><span class="na">payload</span><span class="o">.</span><span class="na">coreAttributes</span>
+<span class="w">                </span><span class="n">E1LFM1M</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                    </span><span class="n">MSGFN</span><span class="o">(</span><span class="s2">&quot;005&quot;</span><span class="o">)</span><span class="w">         </span><span class="c1">// Change function</span>
+<span class="w">                    </span><span class="n">LIFNR</span><span class="o">(</span><span class="n">core</span><span class="o">.</span><span class="na">vendorId</span><span class="o">)</span>
+<span class="w">                    </span><span class="n">NAME1</span><span class="o">(</span><span class="n">core</span><span class="o">.</span><span class="na">name</span><span class="o">)</span>
+<span class="w">                    </span><span class="n">LAND1</span><span class="o">(</span><span class="n">core</span><span class="o">.</span><span class="na">country</span><span class="o">)</span>
+<span class="w">                    </span><span class="n">ORT01</span><span class="o">(</span><span class="n">core</span><span class="o">.</span><span class="na">city</span><span class="o">)</span>
+<span class="w">                    </span><span class="n">STRAS</span><span class="o">(</span><span class="n">core</span><span class="o">.</span><span class="na">street</span><span class="o">)</span>
+<span class="w">                    </span><span class="n">PSTLZ</span><span class="o">(</span><span class="n">core</span><span class="o">.</span><span class="na">postalCode</span><span class="o">)</span>
+<span class="w">                </span><span class="o">}</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setBody</span><span class="o">(</span><span class="n">writer</span><span class="o">.</span><span class="na">toString</span><span class="o">())</span>
+<span class="w">    </span><span class="n">message</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">,</span><span class="w"> </span><span class="s2">&quot;application/xml&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">message</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr />
+<h2 id="cpi-secure-parameter-configuration">CPI Secure Parameter Configuration<a class="headerlink" href="#cpi-secure-parameter-configuration" title="Permanent link">&para;</a></h2>
+<p>All credentials (MDM API URL, XSUAA token URL, client ID/secret, AEM connection) are stored as CPI Secure Parameters — never hardcoded in Groovy scripts.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter Name</th>
+<th>Value Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MDM_API_URL</code></td>
+<td>Kyma API Gateway host</td>
+</tr>
+<tr>
+<td><code>XSUAA_TOKEN_URL</code></td>
+<td>XSUAA service binding secret</td>
+</tr>
+<tr>
+<td><code>MDM_CLIENT_ID</code></td>
+<td>XSUAA service binding</td>
+</tr>
+<tr>
+<td><code>MDM_CLIENT_SECRET</code></td>
+<td>XSUAA service binding</td>
+</tr>
+<tr>
+<td><code>AEM_HOST</code></td>
+<td>AEM service binding</td>
+</tr>
+<tr>
+<td><code>AEM_MSG_VPN</code></td>
+<td>AEM service binding</td>
+</tr>
+<tr>
+<td><code>AEM_CLIENT_USERNAME</code></td>
+<td>AEM service binding</td>
+</tr>
+<tr>
+<td><code>AEM_CLIENT_PASSWORD</code></td>
+<td>AEM service binding</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

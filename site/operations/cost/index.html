@@ -1,0 +1,2412 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Sierra MDM Platform — Architecture and Requirements">
+      
+      
+        <meta name="author" content="Sierra MDM Team">
+      
+      
+      
+        <link rel="prev" href="../monitoring/">
+      
+      
+        <link rel="next" href="../../ai/overview/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Cost of Operations - Sierra MDM Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cost-of-operations" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sierra MDM Platform" class="md-header__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sierra MDM Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cost of Operations
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sierra MDM Platform" class="md-nav__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sierra MDM Platform
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../goals-objectives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Goals & Objectives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benefits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benefits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assumptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assumptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scope
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Data Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/centrally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Centrally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/locally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Locally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/not-in-sap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Not Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Requirements
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Requirements
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/non-functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Non-Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/open-questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDM Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MDM Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/lead-system-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lead System Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/integration-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rbac-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RBAC and Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/data-enrichment-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Enrichment Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/compute-options/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compute Options (Kyma vs AKS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/event-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Broker (AEM vs Kafka)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/data-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Layer (MongoDB & Redis)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost of Operations
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost of Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cost-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost Categories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#btp-platform-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BTP Platform Services
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-kyma-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compute — Kyma Runtime
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-mongodb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database — MongoDB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ai-llm-operations-claude-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI / LLM Operations — Claude API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#people-costs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        People Costs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#total-cost-of-operations-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Total Cost of Operations Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Total Cost of Operations Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-12-foundation-fan-out-13-sites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1–2 (Foundation + Fan-out, 1–3 sites)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-35-full-platform-8-sites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3–5 (Full Platform, 8 sites)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-vs-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost vs Value
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-optimisation-levers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost Optimisation Levers
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI in MDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/spring-boot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Boot (MDM Core API)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/cpi-iflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPI iFlows & Groovy Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/kubernetes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes & Kyma Manifests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cost-categories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost Categories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#btp-platform-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BTP Platform Services
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-kyma-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compute — Kyma Runtime
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-mongodb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Database — MongoDB
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ai-llm-operations-claude-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI / LLM Operations — Claude API
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#observability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observability
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#people-costs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        People Costs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#total-cost-of-operations-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Total Cost of Operations Summary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Total Cost of Operations Summary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-12-foundation-fan-out-13-sites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1–2 (Foundation + Fan-out, 1–3 sites)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-35-full-platform-8-sites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3–5 (Full Platform, 8 sites)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-vs-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost vs Value
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-optimisation-levers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost Optimisation Levers
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cost-of-operations">Cost of Operations<a class="headerlink" href="#cost-of-operations" title="Permanent link">&para;</a></h1>
+<p>This page models the ongoing operational cost of running the Sierra MDM Platform on BTP Kyma. All figures are estimates — actual costs depend on usage volume, BTP contract terms, and selected service plans.</p>
+<hr />
+<h2 id="cost-categories">Cost Categories<a class="headerlink" href="#cost-categories" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Total Monthly Cost
+├── BTP Platform Services         (AEM, CPI, XSUAA, Cloud Logging, Redis HSO)
+├── Compute (Kyma Runtime)        (node pool sizing)
+├── Database (MongoDB)            (Atlas or self-managed)
+├── AI / LLM Operations           (Claude API — autonomous monitoring)
+├── Observability                 (Grafana Cloud or self-managed)
+└── People                        (Data Team, Site Coordinators, BTP Admin)
+</code></pre></div>
+<hr />
+<h2 id="btp-platform-services">BTP Platform Services<a class="headerlink" href="#btp-platform-services" title="Permanent link">&para;</a></h2>
+<p>These are managed BTP services billed against BTP cloud credits.</p>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Plan</th>
+<th>Basis</th>
+<th>Est. Monthly Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SAP Advanced Event Mesh (AEM)</strong></td>
+<td>Default</td>
+<td>Per connection + message throughput</td>
+<td>$800–$2,500</td>
+</tr>
+<tr>
+<td><strong>SAP Cloud Integration (CPI)</strong></td>
+<td>Standard</td>
+<td>Per integration flow execution</td>
+<td>$500–$1,500</td>
+</tr>
+<tr>
+<td><strong>SAP IAS + XSUAA</strong></td>
+<td>Application</td>
+<td>Per active user / month</td>
+<td>$200–$600</td>
+</tr>
+<tr>
+<td><strong>BTP Connectivity Service</strong></td>
+<td>Standard</td>
+<td>Per on-premise connection</td>
+<td>$100–$300</td>
+</tr>
+<tr>
+<td><strong>SAP Cloud Logging</strong></td>
+<td>Development/Standard</td>
+<td>Per GB ingested</td>
+<td>$100–$400</td>
+</tr>
+<tr>
+<td><strong>Redis (BTP Hyperscaler Option)</strong></td>
+<td>Standard</td>
+<td>Per GB RAM</td>
+<td>$150–$500</td>
+</tr>
+<tr>
+<td><strong>Total BTP Services</strong></td>
+<td></td>
+<td></td>
+<td><strong>$1,850–$5,800/month</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">AEM Pricing</p>
+<p>AEM (Solace PubSub+) pricing is sensitive to the number of persistent connections and message throughput tier. Model your peak object change volume and consumer count carefully before selecting an AEM plan. At high object change rates (&gt; 1M events/day), upgrade to the Enterprise tier.</p>
+</div>
+<hr />
+<h2 id="compute-kyma-runtime">Compute — Kyma Runtime<a class="headerlink" href="#compute-kyma-runtime" title="Permanent link">&para;</a></h2>
+<p>Kyma runs on a managed Kubernetes node pool. Sizing depends on the number of MDM microservices and message throughput.</p>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Node Type</th>
+<th>Nodes</th>
+<th>Est. Monthly Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Development</strong></td>
+<td>Standard_D4s_v3 (4 vCPU, 16GB)</td>
+<td>2</td>
+<td>~$250</td>
+</tr>
+<tr>
+<td><strong>Production (Phase 1–2)</strong></td>
+<td>Standard_D8s_v3 (8 vCPU, 32GB)</td>
+<td>3</td>
+<td>~$900</td>
+</tr>
+<tr>
+<td><strong>Production (Phase 3–5, full load)</strong></td>
+<td>Standard_D8s_v3</td>
+<td>5</td>
+<td>~$1,500</td>
+</tr>
+</tbody>
+</table>
+<p>Node costs depend on the underlying hyperscaler (Azure / GCP) negotiated by SAP for Kyma — BTP Kyma nodes are billed at cloud provider rates within the BTP contract.</p>
+<hr />
+<h2 id="database-mongodb">Database — MongoDB<a class="headerlink" href="#database-mongodb" title="Permanent link">&para;</a></h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">MongoDB Atlas (Recommended)</label><label for="__tabbed_1_2">MongoDB Community on Kyma</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Spec</th>
+<th>Est. Monthly Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Development</td>
+<td>M10 (2 vCPU, 2GB RAM)</td>
+<td>~$60</td>
+</tr>
+<tr>
+<td>Production — Phase 1–2</td>
+<td>M30 (2 vCPU, 8GB RAM)</td>
+<td>~$200</td>
+</tr>
+<tr>
+<td>Production — Phase 3–5</td>
+<td>M50 (8 vCPU, 32GB RAM)</td>
+<td>~$700</td>
+</tr>
+<tr>
+<td>Production — High Volume</td>
+<td>M80 (32 vCPU, 128GB RAM)</td>
+<td>~$2,000</td>
+</tr>
+</tbody>
+</table>
+<p>Atlas on Azure can be linked directly to BTP via the Azure Marketplace — service credentials injected as a Kyma ServiceBinding.</p>
+</div>
+<div class="tabbed-block">
+<p>Self-managed via Community Operator on Kyma. No licensing cost, but requires a dedicated StatefulSet with persistent volumes.</p>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>Storage (Premium SSD)</th>
+<th>Est. Monthly Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dev (3-node replica)</td>
+<td>100GB</td>
+<td>~$80</td>
+</tr>
+<tr>
+<td>Prod (3-node replica)</td>
+<td>500GB</td>
+<td>~$300</td>
+</tr>
+<tr>
+<td>Prod (3-node sharded)</td>
+<td>2TB</td>
+<td>~$900</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="ai-llm-operations-claude-api">AI / LLM Operations — Claude API<a class="headerlink" href="#ai-llm-operations-claude-api" title="Permanent link">&para;</a></h2>
+<p>AI-assisted monitoring cost scales with alert volume. See <a href="../../ai/overview/">AI in MDM — Cost Economics</a> for the full token model.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Events Analysed/day</th>
+<th>Est. Monthly Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Minimal — critical alerts only</td>
+<td>5</td>
+<td>~$2</td>
+</tr>
+<tr>
+<td>Standard — warnings + critical</td>
+<td>20</td>
+<td>~$6</td>
+</tr>
+<tr>
+<td>Full autonomous — all log anomalies</td>
+<td>500</td>
+<td>~$80</td>
+</tr>
+<tr>
+<td>Incident month — major degradation events</td>
+<td>+100/incident</td>
+<td>+$24 per incident</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recommendation:</strong> Start with Standard tier (critical + warning alerts only). Expand to full autonomous monitoring once baseline anomaly patterns are established.</p>
+<hr />
+<h2 id="observability">Observability<a class="headerlink" href="#observability" title="Permanent link">&para;</a></h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Grafana Cloud (Recommended)</label><label for="__tabbed_2_2">Self-Managed (Prometheus + Loki on Kyma)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<table>
+<thead>
+<tr>
+<th>Plan</th>
+<th>Included</th>
+<th>Est. Monthly Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free</td>
+<td>10K metrics series, 50GB logs</td>
+<td>$0</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>100K metrics series, 500GB logs</td>
+<td>~$200–$500</td>
+</tr>
+<tr>
+<td>Advanced</td>
+<td>Unlimited + SLA</td>
+<td>Custom pricing</td>
+</tr>
+</tbody>
+</table>
+<p>Kyma MetricPipeline and LogPipeline ship directly to Grafana Cloud via OTLP — no self-managed Prometheus/Loki required.</p>
+</div>
+<div class="tabbed-block">
+<p>No licensing cost, but adds operational overhead for Prometheus, Thanos, Loki, and Grafana on the Kyma cluster.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Est. Monthly Compute Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prometheus + Thanos</td>
+<td>~$80</td>
+</tr>
+<tr>
+<td>Loki + Promtail</td>
+<td>~$60</td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>~$30</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~$170</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="people-costs">People Costs<a class="headerlink" href="#people-costs" title="Permanent link">&para;</a></h2>
+<p>Platform costs are a fraction of total programme cost. People are the largest ongoing operational expense.</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Responsibility</th>
+<th>FTE / Allocation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MDM Platform Engineer</strong></td>
+<td>Kyma operations, CPI iFlow development, service upgrades</td>
+<td>0.5 FTE ongoing</td>
+</tr>
+<tr>
+<td><strong>Data Steward — Central</strong></td>
+<td>Create/approve centrally managed objects, data quality</td>
+<td>1.0 FTE ongoing</td>
+</tr>
+<tr>
+<td><strong>Site Data Coordinator</strong> (per site)</td>
+<td>Locally managed object maintenance</td>
+<td>0.25 FTE per site</td>
+</tr>
+<tr>
+<td><strong>BTP Administrator</strong></td>
+<td>Service provisioning, XSUAA, binding management</td>
+<td>0.25 FTE ongoing</td>
+</tr>
+<tr>
+<td><strong>MDM Support (L1/L2)</strong></td>
+<td>CPI Error Inbox triage, consumer registration, user issues</td>
+<td>0.5 FTE ongoing</td>
+</tr>
+</tbody>
+</table>
+<p>At a loaded cost of $800/day (full-time developer equivalent):</p>
+<table>
+<thead>
+<tr>
+<th>Sites</th>
+<th>FTE Required</th>
+<th>Est. Monthly People Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1–3 sites</td>
+<td>~2.5 FTE</td>
+<td>~$40,000</td>
+</tr>
+<tr>
+<td>4–8 sites</td>
+<td>~3.5 FTE</td>
+<td>~$56,000</td>
+</tr>
+<tr>
+<td>9–15 sites</td>
+<td>~5 FTE</td>
+<td>~$80,000</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="total-cost-of-operations-summary">Total Cost of Operations Summary<a class="headerlink" href="#total-cost-of-operations-summary" title="Permanent link">&para;</a></h2>
+<h3 id="phase-12-foundation-fan-out-13-sites">Phase 1–2 (Foundation + Fan-out, 1–3 sites)<a class="headerlink" href="#phase-12-foundation-fan-out-13-sites" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Monthly</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BTP Platform Services</td>
+<td>$1,850–$3,000</td>
+</tr>
+<tr>
+<td>Kyma Compute (3 nodes)</td>
+<td>$900</td>
+</tr>
+<tr>
+<td>MongoDB Atlas M30</td>
+<td>$200</td>
+</tr>
+<tr>
+<td>Grafana Cloud Pro</td>
+<td>$300</td>
+</tr>
+<tr>
+<td>Claude API (Standard)</td>
+<td>$6</td>
+</tr>
+<tr>
+<td><strong>Infrastructure Total</strong></td>
+<td><strong>~$3,250–$4,400/month</strong></td>
+</tr>
+<tr>
+<td>People (2.5 FTE)</td>
+<td>~$40,000/month</td>
+</tr>
+<tr>
+<td><strong>Grand Total</strong></td>
+<td><strong>~$43,000–$44,500/month</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="phase-35-full-platform-8-sites">Phase 3–5 (Full Platform, 8 sites)<a class="headerlink" href="#phase-35-full-platform-8-sites" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Monthly</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BTP Platform Services</td>
+<td>$3,000–$5,800</td>
+</tr>
+<tr>
+<td>Kyma Compute (5 nodes)</td>
+<td>$1,500</td>
+</tr>
+<tr>
+<td>MongoDB Atlas M50</td>
+<td>$700</td>
+</tr>
+<tr>
+<td>Grafana Cloud Pro</td>
+<td>$400</td>
+</tr>
+<tr>
+<td>Claude API (Full Autonomous)</td>
+<td>$80</td>
+</tr>
+<tr>
+<td><strong>Infrastructure Total</strong></td>
+<td><strong>~$5,700–$8,500/month</strong></td>
+</tr>
+<tr>
+<td>People (4 FTE)</td>
+<td>~$64,000/month</td>
+</tr>
+<tr>
+<td><strong>Grand Total</strong></td>
+<td><strong>~$70,000–$72,500/month</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="cost-vs-value">Cost vs Value<a class="headerlink" href="#cost-vs-value" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Investment</th>
+<th>Estimated Saving</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MDM platform infrastructure ($5K–$9K/month)</td>
+<td>Replaces point-to-point integration maintenance (~$15K–$25K/month across all satellite systems)</td>
+</tr>
+<tr>
+<td>AI monitoring ($80/month)</td>
+<td>Saves ~$2,000+/month in developer on-call time for incident diagnosis and resolution</td>
+</tr>
+<tr>
+<td>AI-assisted development (~$14 per build cycle)</td>
+<td>Replaces ~$6,400–$9,600 of boilerplate development per release cycle</td>
+</tr>
+<tr>
+<td>CPI + AEM vs custom integration (~40% effort reduction)</td>
+<td>For a 6-month build at $800/day with a 5-person team: saves ~$80,000–$120,000 in development cost</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="cost-optimisation-levers">Cost Optimisation Levers<a class="headerlink" href="#cost-optimisation-levers" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>Potential Saving</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Use MongoDB Community on Kyma instead of Atlas</td>
+<td>$200–$700/month</td>
+<td>Self-managed ops; no managed backups</td>
+</tr>
+<tr>
+<td>Downgrade AEM to lower throughput tier off-peak</td>
+<td>$300–$600/month</td>
+<td>Queue depth may grow overnight</td>
+</tr>
+<tr>
+<td>Use <code>claude-haiku-4-5</code> for log triage instead of Opus</td>
+<td>~80% LLM cost reduction</td>
+<td>Lower accuracy on complex incidents</td>
+</tr>
+<tr>
+<td>Self-managed Prometheus + Loki instead of Grafana Cloud</td>
+<td>$0 vs $300–$500/month</td>
+<td>Additional Kyma node overhead</td>
+</tr>
+<tr>
+<td>Reduce CPI iFlow polling frequency for batch consumers</td>
+<td>Reduced CPI execution cost</td>
+<td>Longer delivery latency for batch</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

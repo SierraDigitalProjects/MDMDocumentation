@@ -1,0 +1,71 @@
+site_name: Sierra MDM Platform
+site_description: Sierra MDM Platform — Architecture and Requirements
+site_author: Sierra MDM Team
+docs_dir: docs
+repo_name: SierraDock/MDM
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.indexes
+    - toc.follow
+    - search.suggest
+    - search.highlight
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+
+nav:
+  - Home: index.md
+  - Goals & Objectives: goals-objectives.md
+  - Benefits: benefits.md
+  - Assumptions: assumptions.md
+  - Scope:
+      - Master Data Overview: inventory/overview.md
+      - Centrally Managed in SAP: inventory/centrally-managed.md
+      - Locally Managed in SAP: inventory/locally-managed.md
+      - Not Managed in SAP: inventory/not-in-sap.md
+  - Requirements:
+      - Functional Requirements: requirements/functional.md
+      - Non-Functional Requirements: requirements/non-functional.md
+      - Open Questions: requirements/open-questions.md
+  - Architecture:
+      - MDM Architecture:
+          - Lead System Strategy: architecture/lead-system-strategy.md
+          - Integration Patterns: architecture/integration-patterns.md
+          - RBAC and Governance: architecture/rbac-governance.md
+          - Data Enrichment Governance: architecture/data-enrichment-governance.md
+      - Technical Architecture:
+          - Overview: technical-architecture/overview.md
+          - Compute Options (Kyma vs AKS): technical-architecture/compute-options.md
+          - Event Broker (AEM vs Kafka): technical-architecture/event-broker.md
+          - Data Layer (MongoDB & Redis): technical-architecture/data-layer.md
+  - Operations:
+      - Autonomous Monitoring: operations/monitoring.md
+      - Cost of Operations: operations/cost.md
+  - AI in MDM: ai/overview.md
+  - Code Reference:
+      - Spring Boot (MDM Core API): code-reference/spring-boot.md
+      - CPI iFlows & Groovy Scripts: code-reference/cpi-iflows.md
+      - Kubernetes & Kyma Manifests: code-reference/kubernetes.md
+  - About:
+      - Project Structure: project-structure.md
