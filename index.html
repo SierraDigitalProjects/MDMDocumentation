@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sierra-aura-architecture-requirements" class="md-skip">
+        <a href="#sierra-aura-mdm-platform" class="md-skip">
           Skip to content
         </a>
       
@@ -282,10 +282,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#executive-summary" class="md-nav__link">
+  <a href="#management-tiers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Executive Summary
+        Management Tiers
       
     </span>
   </a>
@@ -293,41 +293,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#scope" class="md-nav__link">
+  <a href="#what-this-site-covers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Scope
+        What This Site Covers
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#source-material" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Source Material
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Source Material">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#legend-from-source-slide" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Legend (from source slide)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1630,10 +1602,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#executive-summary" class="md-nav__link">
+  <a href="#management-tiers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Executive Summary
+        Management Tiers
       
     </span>
   </a>
@@ -1641,41 +1613,13 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#scope" class="md-nav__link">
+  <a href="#what-this-site-covers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Scope
+        What This Site Covers
       
     </span>
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#source-material" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Source Material
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Source Material">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#legend-from-source-slide" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Legend (from source slide)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1718,124 +1662,89 @@
 
 
 
-<h1 id="sierra-aura-architecture-requirements">Sierra Aura — Architecture &amp; Requirements<a class="headerlink" href="#sierra-aura-architecture-requirements" title="Permanent link">&para;</a></h1>
-<h2 id="executive-summary">Executive Summary<a class="headerlink" href="#executive-summary" title="Permanent link">&para;</a></h2>
-<p>This document captures the architectural analysis and requirements derived from the SierraDock Master Data Management (MDM) initiative. The primary input was a master data object inventory identifying <strong>83 SAP master data objects</strong> across 10 functional modules, each classified by how they are currently maintained.</p>
-<p>The analysis reveals three distinct management tiers that directly drive MDM architecture decisions:</p>
+<h1 id="sierra-aura-mdm-platform">Sierra Aura — MDM Platform<a class="headerlink" href="#sierra-aura-mdm-platform" title="Permanent link">&para;</a></h1>
+<p>Sierra Aura is a Master Data Management platform, built to establish a single source of truth for master data across all business systems and operational sites.</p>
+<p>Today, <strong>83 master data objects</strong> are spread across 10 SAP functional modules — maintained by different teams, in different systems, with no shared standard and no reliable mechanism to keep downstream consumers in sync. Sierra Aura resolves this by providing a governed, event-driven platform where every object has a defined owner, every change is traceable, and every system receives updates automatically.</p>
+<hr />
+<h2 id="management-tiers">Management Tiers<a class="headerlink" href="#management-tiers" title="Permanent link">&para;</a></h2>
+<p>Sierra Aura organises master data into three tiers, each reflecting how data is owned and where the system of record lives.</p>
 <table>
 <thead>
 <tr>
 <th>Tier</th>
-<th>Count</th>
-<th>Implication</th>
+<th style="text-align: center;">Objects</th>
+<th>What this means</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Centrally Managed in SAP</strong> (Data Team)</td>
-<td>27 objects</td>
-<td>SAP S/4HANA is lead system; MDM consumes via CPI</td>
+<td><strong>Centrally Managed in SAP</strong></td>
+<td style="text-align: center;">35</td>
+<td>SAP S/4HANA is authoritative. The central Data Team governs creation and changes. Sierra Aura replicates inbound via CPI.</td>
 </tr>
 <tr>
-<td><strong>Managed Locally in SAP</strong> (Site Operations)</td>
-<td>25 objects</td>
-<td>SAP is system of record; MDM needs site-scoped RBAC</td>
+<td><strong>Locally Managed in SAP</strong></td>
+<td style="text-align: center;">23</td>
+<td>SAP is the system of record, but individual sites maintain their own records. Sierra Aura provides cross-site visibility and governance.</td>
 </tr>
 <tr>
-<td><strong>Not Managed in SAP at ND</strong></td>
-<td>31 objects</td>
-<td>No current system of record; MDM becomes lead system</td>
+<td><strong>Not in SAP (MDM Lead)</strong></td>
+<td style="text-align: center;">36</td>
+<td>No current system of record exists. Sierra Aura becomes the authoritative source — downstream systems, including SAP where relevant, consume from it.</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition warning">
-<p class="admonition-title">Biggest MDM Opportunity</p>
-<p>The <strong>31 objects not currently managed in SAP</strong> represent the highest-value MDM use case. These objects have no single system of record today and are prime candidates for MDM as the authoritative source.</p>
+<div class="admonition tip">
+<p class="admonition-title">Highest-Value Opportunity</p>
+<p>The <strong>36 objects with no current system of record</strong> — spanning CRM, EH&amp;S, and HR — represent the biggest governance gap. These are managed today in spreadsheets or informal processes. Sierra Aura gives them a home.</p>
 </div>
 <hr />
-<h2 id="scope">Scope<a class="headerlink" href="#scope" title="Permanent link">&para;</a></h2>
-<p>This document covers:</p>
+<h2 id="what-this-site-covers">What This Site Covers<a class="headerlink" href="#what-this-site-covers" title="Permanent link">&para;</a></h2>
+<p>This documentation is the definitive reference for Sierra Aura. It covers:</p>
 <ul>
-<li>Full inventory of master data objects by module and management status</li>
-<li>Architectural recommendations for lead system assignment</li>
-<li>Integration pattern guidance (SAP CPI / IDoc / direct)</li>
-<li>Role-based access control (RBAC) requirements driven by the central vs. local split</li>
-<li>Functional and non-functional requirements for the MDM platform</li>
+<li><strong>Goals &amp; Benefits</strong> — what the platform is designed to achieve and the value it delivers</li>
+<li><strong>Scope</strong> — the full inventory of 83 master data objects classified by module and tier</li>
+<li><strong>Requirements</strong> — functional and non-functional requirements, plus open questions</li>
+<li><strong>Architecture</strong> — lead system strategy, integration patterns, RBAC, and data enrichment governance</li>
+<li><strong>Technical Stack</strong> — platform decisions across compute, event broker, data layer, and observability</li>
+<li><strong>Operations</strong> — autonomous monitoring, alerting, self-healing, and cost of operations</li>
+<li><strong>AI in MDM</strong> — how AI accelerates development and reduces operational overhead</li>
 </ul>
-<hr />
-<h2 id="source-material">Source Material<a class="headerlink" href="#source-material" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Document</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>SAP Masterdata 1.pptx</code></td>
-<td>Master data object inventory with color-coded management classification</td>
-</tr>
-</tbody>
-</table>
-<h3 id="legend-from-source-slide">Legend (from source slide)<a class="headerlink" href="#legend-from-source-slide" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Color</th>
-<th>Classification</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Orange (<code>accent3</code>)</td>
-<td>Centrally Managed by Data Team</td>
-</tr>
-<tr>
-<td>Light Blue (<code>#00B0F0</code>)</td>
-<td>Managed Locally by Site Operations</td>
-</tr>
-<tr>
-<td>White (<code>bg1</code>)</td>
-<td>Not Managed in SAP at ND</td>
-</tr>
-</tbody>
-</table>
 <hr />
 <h2 id="modules-in-scope">Modules in Scope<a class="headerlink" href="#modules-in-scope" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Module</th>
-<th>SAP Module Code</th>
-<th>In SAP?</th>
+<th>SAP Code</th>
+<th>SAP Managed?</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>Customer Relationship Management</td>
 <td>CRM</td>
-<td>CRM</td>
-<td>No</td>
+<td>No — MDM lead</td>
 </tr>
 <tr>
-<td>EH&amp;S</td>
+<td>Environment, Health &amp; Safety</td>
 <td>EHS</td>
-<td>No</td>
+<td>No — MDM lead</td>
 </tr>
 <tr>
-<td>Finance</td>
+<td>Finance &amp; Controlling</td>
 <td>FI/CO</td>
-<td>Yes</td>
+<td>Yes — centrally managed</td>
 </tr>
 <tr>
-<td>HR</td>
+<td>Human Resources</td>
 <td>HR/HCM</td>
-<td>No</td>
+<td>No — MDM lead</td>
 </tr>
 <tr>
-<td>SCM / Purchasing</td>
+<td>Supply Chain &amp; Purchasing</td>
 <td>MM/SCM</td>
-<td>Yes</td>
+<td>Yes — centrally managed</td>
 </tr>
 <tr>
 <td>Sales &amp; Distribution</td>
@@ -1848,9 +1757,9 @@
 <td>Partial</td>
 </tr>
 <tr>
-<td>Production Planning / Quality</td>
+<td>Production Planning &amp; Quality</td>
 <td>PP/QM</td>
-<td>Partial (Local only)</td>
+<td>Yes — locally managed</td>
 </tr>
 <tr>
 <td>Project Systems</td>
@@ -1858,9 +1767,9 @@
 <td>Partial</td>
 </tr>
 <tr>
-<td>Other (cross-module)</td>
+<td>Cross-module</td>
 <td>Various</td>
-<td>Partial</td>
+<td>Mixed</td>
 </tr>
 </tbody>
 </table>
@@ -1876,19 +1785,19 @@
 <tbody>
 <tr>
 <td>MDM Architect</td>
-<td>Architecture decisions and integration patterns</td>
+<td>Architecture decisions, integration patterns, platform design</td>
 </tr>
 <tr>
-<td>Data Team</td>
-<td>Centrally managed object governance</td>
+<td>Data Team Lead</td>
+<td>Centrally managed object governance and data stewardship</td>
 </tr>
 <tr>
 <td>Site Operations</td>
-<td>Locally managed object governance</td>
+<td>Locally managed object maintenance and coordinator oversight</td>
 </tr>
 <tr>
 <td>Functional Leads</td>
-<td>Module-specific requirements validation</td>
+<td>Module-specific requirements validation and sign-off</td>
 </tr>
 </tbody>
 </table>
