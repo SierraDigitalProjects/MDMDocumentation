@@ -1688,7 +1688,7 @@
 
 <h1 id="technical-architecture-overview">Technical Architecture Overview<a class="headerlink" href="#technical-architecture-overview" title="Permanent link">&para;</a></h1>
 <h2 id="architecture-pattern">Architecture Pattern<a class="headerlink" href="#architecture-pattern" title="Permanent link">&para;</a></h2>
-<p>The SierraDock MDM solution follows a <strong>microservices + event-driven architecture</strong>. Every master data change is propagated to satellite systems via an event broker, with configurable delivery schedules per consumer and field-level filtering to avoid unnecessary fan-out.</p>
+<p>The Sierra Aura solution follows a <strong>microservices + event-driven architecture</strong>. Every master data change is propagated to satellite systems via an event broker, with configurable delivery schedules per consumer and field-level filtering to avoid unnecessary fan-out.</p>
 <div class="highlight"><pre><span></span><code>Lead Systems (S4HANA, CRM, Workday, etc.)
         │
         ▼ REST / IDoc inbound (via CPI)
