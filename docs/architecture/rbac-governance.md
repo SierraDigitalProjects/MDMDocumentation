@@ -54,7 +54,7 @@ For locally managed objects, MDM must enforce **site isolation** at the data lev
 ### Site Hierarchy
 
 ```
-SierraDock ND (Enterprise)
+Sierra Aura (Enterprise)
 ├── Site A
 │   └── Site Data Coordinator A
 ├── Site B

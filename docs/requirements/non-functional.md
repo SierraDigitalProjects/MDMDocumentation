@@ -20,7 +20,7 @@
 | ID | Requirement | Target | Notes |
 |---|---|---|---|
 | NFR-02.1 | MDM platform uptime (excluding planned maintenance) | 99.5% | ~44 hours downtime/year |
-| NFR-02.2 | Planned maintenance windows must not fall during business hours | Nights/weekends only | SierraDock business hours TBD |
+| NFR-02.2 | Planned maintenance windows must not fall during business hours | Nights/weekends only | Business hours TBD |
 | NFR-02.3 | Integration message queue must be durable — no message loss on platform restart | Zero message loss | Dead letter queue required |
 | NFR-02.4 | MDM must support active/passive failover | RPO < 1 hour, RTO < 4 hours | |
 | NFR-02.5 | SAP replication must resume automatically after CPI outage without data loss | Automatic retry | |

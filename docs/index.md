@@ -1,64 +1,54 @@
-# Sierra Aura — Architecture & Requirements
+# Sierra Aura — MDM Platform
 
-## Executive Summary
+Sierra Aura is a Master Data Management platform, built to establish a single source of truth for master data across all business systems and operational sites.
 
-This document captures the architectural analysis and requirements derived from the SierraDock Master Data Management (MDM) initiative. The primary input was a master data object inventory identifying **83 SAP master data objects** across 10 functional modules, each classified by how they are currently maintained.
-
-The analysis reveals three distinct management tiers that directly drive MDM architecture decisions:
-
-| Tier | Count | Implication |
-|---|---|---|
-| **Centrally Managed in SAP** (Data Team) | 27 objects | SAP S/4HANA is lead system; MDM consumes via CPI |
-| **Managed Locally in SAP** (Site Operations) | 25 objects | SAP is system of record; MDM needs site-scoped RBAC |
-| **Not Managed in SAP at ND** | 31 objects | No current system of record; MDM becomes lead system |
-
-!!! warning "Biggest MDM Opportunity"
-    The **31 objects not currently managed in SAP** represent the highest-value MDM use case. These objects have no single system of record today and are prime candidates for MDM as the authoritative source.
+Today, **83 master data objects** are spread across 10 SAP functional modules — maintained by different teams, in different systems, with no shared standard and no reliable mechanism to keep downstream consumers in sync. Sierra Aura resolves this by providing a governed, event-driven platform where every object has a defined owner, every change is traceable, and every system receives updates automatically.
 
 ---
 
-## Scope
+## Management Tiers
 
-This document covers:
+Sierra Aura organises master data into three tiers, each reflecting how data is owned and where the system of record lives.
 
-- Full inventory of master data objects by module and management status
-- Architectural recommendations for lead system assignment
-- Integration pattern guidance (SAP CPI / IDoc / direct)
-- Role-based access control (RBAC) requirements driven by the central vs. local split
-- Functional and non-functional requirements for the MDM platform
+| Tier | Objects | What this means |
+|---|:---:|---|
+| **Centrally Managed in SAP** | 35 | SAP S/4HANA is authoritative. The central Data Team governs creation and changes. Sierra Aura replicates inbound via CPI. |
+| **Locally Managed in SAP** | 23 | SAP is the system of record, but individual sites maintain their own records. Sierra Aura provides cross-site visibility and governance. |
+| **Not in SAP (MDM Lead)** | 36 | No current system of record exists. Sierra Aura becomes the authoritative source — downstream systems, including SAP where relevant, consume from it. |
+
+!!! tip "Highest-Value Opportunity"
+    The **36 objects with no current system of record** — spanning CRM, EH&S, and HR — represent the biggest governance gap. These are managed today in spreadsheets or informal processes. Sierra Aura gives them a home.
 
 ---
 
-## Source Material
+## What This Site Covers
 
-| Document | Description |
-|---|---|
-| `SAP Masterdata 1.pptx` | Master data object inventory with color-coded management classification |
+This documentation is the definitive reference for Sierra Aura. It covers:
 
-### Legend (from source slide)
-
-| Color | Classification |
-|---|---|
-| Orange (`accent3`) | Centrally Managed by Data Team |
-| Light Blue (`#00B0F0`) | Managed Locally by Site Operations |
-| White (`bg1`) | Not Managed in SAP at ND |
+- **Goals & Benefits** — what the platform is designed to achieve and the value it delivers
+- **Scope** — the full inventory of 83 master data objects classified by module and tier
+- **Requirements** — functional and non-functional requirements, plus open questions
+- **Architecture** — lead system strategy, integration patterns, RBAC, and data enrichment governance
+- **Technical Stack** — platform decisions across compute, event broker, data layer, and observability
+- **Operations** — autonomous monitoring, alerting, self-healing, and cost of operations
+- **AI in MDM** — how AI accelerates development and reduces operational overhead
 
 ---
 
 ## Modules in Scope
 
-| Module | SAP Module Code | In SAP? |
+| Module | SAP Code | SAP Managed? |
 |---|---|---|
-| CRM | CRM | No |
-| EH&S | EHS | No |
-| Finance | FI/CO | Yes |
-| HR | HR/HCM | No |
-| SCM / Purchasing | MM/SCM | Yes |
+| Customer Relationship Management | CRM | No — MDM lead |
+| Environment, Health & Safety | EHS | No — MDM lead |
+| Finance & Controlling | FI/CO | Yes — centrally managed |
+| Human Resources | HR/HCM | No — MDM lead |
+| Supply Chain & Purchasing | MM/SCM | Yes — centrally managed |
 | Sales & Distribution | SD | Partial |
 | Plant Maintenance | PM | Partial |
-| Production Planning / Quality | PP/QM | Partial (Local only) |
+| Production Planning & Quality | PP/QM | Yes — locally managed |
 | Project Systems | PS | Partial |
-| Other (cross-module) | Various | Partial |
+| Cross-module | Various | Mixed |
 
 ---
 
@@ -66,7 +56,7 @@ This document covers:
 
 | Role | Responsibility |
 |---|---|
-| MDM Architect | Architecture decisions and integration patterns |
-| Data Team | Centrally managed object governance |
-| Site Operations | Locally managed object governance |
-| Functional Leads | Module-specific requirements validation |
+| MDM Architect | Architecture decisions, integration patterns, platform design |
+| Data Team Lead | Centrally managed object governance and data stewardship |
+| Site Operations | Locally managed object maintenance and coordinator oversight |
+| Functional Leads | Module-specific requirements validation and sign-off |
