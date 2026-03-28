@@ -1,0 +1,2470 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Sierra MDM Platform — Architecture and Requirements">
+      
+      
+        <meta name="author" content="Sierra MDM Team">
+      
+      
+      
+        <link rel="prev" href="../compute-options/">
+      
+      
+        <link rel="next" href="../data-layer/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Event Broker (AEM vs Kafka) - Sierra MDM Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#event-broker-aem-vs-kafka-vs-kyma-eventing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sierra MDM Platform" class="md-header__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sierra MDM Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Event Broker (AEM vs Kafka)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sierra MDM Platform" class="md-nav__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sierra MDM Platform
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../goals-objectives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Goals & Objectives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benefits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benefits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assumptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assumptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scope
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Data Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/centrally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Centrally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/locally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Locally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/not-in-sap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Not Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Requirements
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Requirements
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/non-functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Non-Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/open-questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDM Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MDM Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/lead-system-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lead System Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/integration-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rbac-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RBAC and Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/data-enrichment-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Enrichment Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compute-options/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compute Options (Kyma vs AKS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Broker (AEM vs Kafka)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Broker (AEM vs Kafka)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#comparison-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison Matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-kyma-eventing-is-not-sufficient-for-mdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Kyma Eventing Is Not Sufficient for MDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why Kyma Eventing Is Not Sufficient for MDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gap-1-no-compacted-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap 1 — No Compacted Topics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gap-2-no-scheduled-delivery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap 2 — No Scheduled Delivery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verdict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-hybrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Hybrid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aem-vs-kafka-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AEM vs Kafka — Decision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#effort-reduction-kyma-aem-cpi-vs-kyma-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Effort Reduction: Kyma + AEM + CPI vs Kyma + Kafka
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-still-requires-custom-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Still Requires Custom Code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trade-offs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-recommendation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Recommendation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aem-topic-design-for-mdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AEM Topic Design for MDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AEM Topic Design for MDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#queue-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queue Definitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-topic-design-for-mdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kafka Topic Design for MDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka Topic Design for MDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#redpanda-vs-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redpanda vs Kafka
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Layer (MongoDB & Redis)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/cost/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost of Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI in MDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/spring-boot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Boot (MDM Core API)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/cpi-iflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPI iFlows & Groovy Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/kubernetes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes & Kyma Manifests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#comparison-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparison Matrix
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-kyma-eventing-is-not-sufficient-for-mdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why Kyma Eventing Is Not Sufficient for MDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why Kyma Eventing Is Not Sufficient for MDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gap-1-no-compacted-topics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap 1 — No Compacted Topics
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gap-2-no-scheduled-delivery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gap 2 — No Scheduled Delivery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verdict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verdict
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommended-hybrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recommended Hybrid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aem-vs-kafka-decision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AEM vs Kafka — Decision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#effort-reduction-kyma-aem-cpi-vs-kyma-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Effort Reduction: Kyma + AEM + CPI vs Kyma + Kafka
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-still-requires-custom-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Still Requires Custom Code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trade-offs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Trade-offs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-recommendation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Recommendation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aem-topic-design-for-mdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AEM Topic Design for MDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AEM Topic Design for MDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#queue-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Queue Definitions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kafka-topic-design-for-mdm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kafka Topic Design for MDM
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Kafka Topic Design for MDM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#redpanda-vs-kafka" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Redpanda vs Kafka
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="event-broker-aem-vs-kafka-vs-kyma-eventing">Event Broker — AEM vs Kafka vs Kyma Eventing<a class="headerlink" href="#event-broker-aem-vs-kafka-vs-kyma-eventing" title="Permanent link">&para;</a></h1>
+<h2 id="comparison-matrix">Comparison Matrix<a class="headerlink" href="#comparison-matrix" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Kyma Eventing (NATS)</th>
+<th>Strimzi Kafka / Redpanda</th>
+<th>SAP AEM (Solace)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fan-out to multiple consumers</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>At-least-once delivery</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Compacted topics (last-value per key)</strong></td>
+<td><strong>No</strong></td>
+<td><strong>Yes</strong></td>
+<td><strong>Yes (Last-Value Queue)</strong></td>
+</tr>
+<tr>
+<td><strong>Scheduled / batched delivery</strong></td>
+<td><strong>No</strong></td>
+<td><strong>Yes</strong></td>
+<td><strong>Yes (via CPI Timer)</strong></td>
+</tr>
+<tr>
+<td>Consumer lag visibility</td>
+<td>No</td>
+<td>Yes (native)</td>
+<td>Yes (AEM console)</td>
+</tr>
+<tr>
+<td>Field-level consumer filtering</td>
+<td>Custom code</td>
+<td>Custom code</td>
+<td>Custom code (same)</td>
+</tr>
+<tr>
+<td>Message replay / rewind</td>
+<td>Limited (time-based)</td>
+<td>Yes (offset-based)</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>KEDA autoscaling on lag</td>
+<td>NATS JetStream scaler</td>
+<td>Kafka scaler (mature)</td>
+<td>Solace KEDA scaler</td>
+</tr>
+<tr>
+<td>Dead letter queue</td>
+<td>Basic</td>
+<td>Mature</td>
+<td>AEM DLQ (built-in)</td>
+</tr>
+<tr>
+<td>Schema registry</td>
+<td>No</td>
+<td>Apicurio / Confluent</td>
+<td>No (payload opaque)</td>
+</tr>
+<tr>
+<td><strong>High throughput</strong></td>
+<td>~500K msg/s</td>
+<td>Millions/s</td>
+<td>Millions/s (Solace)</td>
+</tr>
+<tr>
+<td>Operational complexity</td>
+<td>None (managed)</td>
+<td>Medium (Strimzi)</td>
+<td>None (managed BTP)</td>
+</tr>
+<tr>
+<td>Kafka client compatibility</td>
+<td>No</td>
+<td>Yes</td>
+<td>No (AMQP/Solace API)</td>
+</tr>
+<tr>
+<td>SAP ecosystem fit</td>
+<td>Native on Kyma</td>
+<td>Neutral</td>
+<td>Native on BTP</td>
+</tr>
+<tr>
+<td>Open standard</td>
+<td>CloudEvents</td>
+<td>Kafka protocol</td>
+<td>Solace/AMQP</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="why-kyma-eventing-is-not-sufficient-for-mdm">Why Kyma Eventing Is Not Sufficient for MDM<a class="headerlink" href="#why-kyma-eventing-is-not-sufficient-for-mdm" title="Permanent link">&para;</a></h2>
+<h3 id="gap-1-no-compacted-topics">Gap 1 — No Compacted Topics<a class="headerlink" href="#gap-1-no-compacted-topics" title="Permanent link">&para;</a></h3>
+<p>Master data is <strong>stateful</strong>. If a consumer is offline for two days and reconnects, it should receive only the <strong>latest state</strong> per object — not 48 hours of intermediate changes.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Kafka / AEM (correct)</label><label for="__tabbed_1_2">Kyma Eventing (problem)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>Object MDM-CUST-001 changed 50 times over 2 days
+    │
+    ▼ Kafka log compaction / AEM Last-Value Queue
+Consumer receives: MDM-CUST-001 @ version 50 only ✓
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>Object MDM-CUST-001 changed 50 times over 2 days
+    │
+    ▼ NATS — no compaction
+Consumer receives: all 50 intermediate states
+Consumer must reconcile them in application code ✗
+</code></pre></div>
+</div>
+</div>
+</div>
+<h3 id="gap-2-no-scheduled-delivery">Gap 2 — No Scheduled Delivery<a class="headerlink" href="#gap-2-no-scheduled-delivery" title="Permanent link">&para;</a></h3>
+<p>Requirement 5 states: consumers must be able to choose <strong>scheduled delivery</strong> (e.g., nightly batch) instead of real-time.</p>
+<p>Kyma Eventing pushes immediately — there is no mechanism to hold events until a consumer's scheduled window. Building a buffer service in front of the consumer effectively rebuilds a queue, which is the same effort as deploying Kafka or AEM.</p>
+<p>Kafka solves this naturally — the consumer polls on its own schedule from its last committed offset:</p>
+<div class="highlight"><pre><span></span><code>Scheduler triggers Consumer A at 02:00
+    │
+    ▼ Consumer polls Kafka from last committed offset
+    │ reads all changes since last night in one batch
+    ▼
+Processes batch, commits offset
+</code></pre></div>
+<h3 id="verdict">Verdict<a class="headerlink" href="#verdict" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>Kyma Eventing is <strong>not a replacement</strong> for Kafka or AEM in this MDM architecture.</p>
+</blockquote>
+<hr />
+<h2 id="recommended-hybrid">Recommended Hybrid<a class="headerlink" href="#recommended-hybrid" title="Permanent link">&para;</a></h2>
+<p>Use Kyma Eventing and the external broker <strong>together</strong> — each for what it does well:</p>
+<div class="highlight"><pre><span></span><code>MDM Core API
+    │
+    ├──► Kyma Eventing (NATS)         Internal events only
+    │        ├── Cache invalidation
+    │        ├── Schema change notify
+    │        └── Internal service triggers
+    │
+    └──► AEM / Kafka                  External consumer fan-out
+             ├── Satellite system delivery
+             ├── Scheduled batch consumers
+             ├── Compacted master data topics
+             └── Consumer lag tracking
+</code></pre></div>
+<hr />
+<h2 id="aem-vs-kafka-decision">AEM vs Kafka — Decision<a class="headerlink" href="#aem-vs-kafka-decision" title="Permanent link">&para;</a></h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Choose AEM</label><label for="__tabbed_2_2">Choose Kafka (Redpanda)</label><label for="__tabbed_2_3">Choose Both</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<ul>
+<li>Majority of consumers are SAP systems</li>
+<li>CPI pre-built adapters available — eliminates custom integration code</li>
+<li>Team has BTP/SAP integration experience</li>
+<li>Managed service preferred (no Strimzi operator to run)</li>
+<li>BTP credits / budget available</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>Non-SAP or mixed consumer landscape</li>
+<li>Need Kafka ecosystem (Debezium, KEDA Kafka scaler, Schema Registry, Kafka Connect)</li>
+<li>Want open-standard protocol</li>
+<li>Budget-constrained (no AEM licensing)</li>
+<li>Team stronger in Kafka tooling</li>
+</ul>
+</div>
+<div class="tabbed-block">
+<ul>
+<li>AEM for SAP-to-SAP fan-out (use CPI pre-built adapters)</li>
+<li>Redpanda for non-SAP high-volume consumers</li>
+<li>MDM Core API publishes to both from the same change event</li>
+</ul>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="effort-reduction-kyma-aem-cpi-vs-kyma-kafka">Effort Reduction: Kyma + AEM + CPI vs Kyma + Kafka<a class="headerlink" href="#effort-reduction-kyma-aem-cpi-vs-kyma-kafka" title="Permanent link">&para;</a></h2>
+<p>Compared to the AKS + Strimzi Kafka + custom integration baseline:</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Kyma + Kafka</th>
+<th>Kyma + AEM + CPI</th>
+<th>Additional Reduction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Event broker setup / ops</td>
+<td>Medium (Strimzi operator)</td>
+<td>None (managed AEM)</td>
+<td>+40%</td>
+</tr>
+<tr>
+<td>SAP inbound integration</td>
+<td>Low (BTP Connectivity)</td>
+<td>Very Low (CPI pre-built content)</td>
+<td>+25%</td>
+</tr>
+<tr>
+<td>Outbound integration per system</td>
+<td>High (custom consumer code)</td>
+<td>Low (CPI iFlow per system)</td>
+<td>+50%</td>
+</tr>
+<tr>
+<td>Retry / error handling</td>
+<td>Custom code</td>
+<td>Built-in CPI</td>
+<td>+60%</td>
+</tr>
+<tr>
+<td>Scheduled delivery</td>
+<td>Custom scheduler + Kafka</td>
+<td>CPI Timer iFlow</td>
+<td>+40%</td>
+</tr>
+<tr>
+<td>Consumer monitoring</td>
+<td>Custom Prometheus scraper</td>
+<td>CPI + AEM consoles</td>
+<td>+35%</td>
+</tr>
+<tr>
+<td>Schema / format transformation</td>
+<td>Custom code</td>
+<td>CPI mapping editor</td>
+<td>+55%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Overall project effort reduction vs AKS baseline: ~40–45%</strong>
+<em>(vs ~25–35% with Kyma + Kafka alone)</em></p>
+<hr />
+<h2 id="what-still-requires-custom-code">What Still Requires Custom Code<a class="headerlink" href="#what-still-requires-custom-code" title="Permanent link">&para;</a></h2>
+<p>AEM + CPI does not eliminate MDM business logic. These components are always custom-built regardless of the event broker choice:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Why It Cannot Be Replaced</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MDM Core API (Spring Boot)</td>
+<td>Business logic, schema engine, RBAC enforcement</td>
+</tr>
+<tr>
+<td>Schema / Object Definition Service</td>
+<td>MDM-specific, no off-the-shelf solution</td>
+</tr>
+<tr>
+<td>Consumer Registry Service</td>
+<td>MDM-specific configuration store</td>
+</tr>
+<tr>
+<td>Field-level change tracker</td>
+<td>Field diff computation is always custom</td>
+</tr>
+<tr>
+<td>Read-through cache (Redis)</td>
+<td>Cache layer logic and invalidation strategy</td>
+</tr>
+<tr>
+<td>MongoDB data model</td>
+<td>Custom per MDM object definitions</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="trade-offs">Trade-offs<a class="headerlink" href="#trade-offs" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Trade-off</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cost</strong></td>
+<td>AEM and CPI are licensed BTP services — factor credits carefully. AEM charges by connection tier and message throughput; high-volume MDM deployments should model costs before committing</td>
+</tr>
+<tr>
+<td><strong>CPI iFlow per consumer</strong></td>
+<td>Each satellite system needs its own iFlow — manageable, but adds CPI development overhead as the consumer count grows</td>
+</tr>
+<tr>
+<td><strong>AEM is not Kafka-compatible</strong></td>
+<td>Cannot use Kafka client libraries, Debezium Kafka Connect, or the KEDA Kafka scaler — requires AMQP client (Apache Qpid or Solace Java API) and the KEDA Solace scaler instead</td>
+</tr>
+<tr>
+<td><strong>Vendor dependency</strong></td>
+<td>Deeper SAP ecosystem lock-in vs Kafka which is an open standard with a broad tooling ecosystem</td>
+</tr>
+<tr>
+<td><strong>AEM throughput pricing</strong></td>
+<td>Solace charges by connection and throughput tier — model your peak object change volume before selecting a plan</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="final-recommendation">Final Recommendation<a class="headerlink" href="#final-recommendation" title="Permanent link">&para;</a></h2>
+<div class="admonition success">
+<p class="admonition-title">Use AEM + CPI if:</p>
+<ul>
+<li>Majority of satellite systems are SAP (S/4HANA, SuccessFactors, Ariba)</li>
+<li>Your team has CPI iFlow development experience</li>
+<li>BTP credits / budget is available and scoped</li>
+<li>You want minimal operational responsibility for the event broker</li>
+<li>You want to leverage CPI's built-in retry, error inbox, and transformation tooling</li>
+</ul>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Stick with Strimzi / Redpanda if:</p>
+<ul>
+<li>Satellite systems are mostly non-SAP or highly heterogeneous</li>
+<li>Budget is constrained and open-source is preferred</li>
+<li>Your team is stronger in the Kafka / JVM ecosystem</li>
+<li>You need Debezium Kafka Connect, Kafka Schema Registry, or KEDA Kafka scaler</li>
+<li>You want open-standard event streaming with no vendor lock-in</li>
+</ul>
+</div>
+<hr />
+<h2 id="aem-topic-design-for-mdm">AEM Topic Design for MDM<a class="headerlink" href="#aem-topic-design-for-mdm" title="Permanent link">&para;</a></h2>
+<p>AEM (Solace) uses <code>/</code>-separated topic strings with wildcard support (<code>*</code> = one level, <code>&gt;</code> = all levels below).</p>
+<div class="highlight"><pre><span></span><code>Topic pattern: mdm/{objectType}/{eventType}/{version}/{leadSystem}
+
+Examples:
+  mdm/customer/created/v1/S4HANA
+  mdm/customer/changed/v1/S4HANA
+  mdm/customer/deleted/v1/CRM
+  mdm/vendor/changed/v1/S4HANA
+  mdm/material/changed/v1/EWM
+</code></pre></div>
+<h3 id="queue-definitions">Queue Definitions<a class="headerlink" href="#queue-definitions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Queue Name</th>
+<th>Type</th>
+<th>Subscriber Wildcard</th>
+<th>Consumer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mdm.crm.customer.realtime.queue</code></td>
+<td>Persistent</td>
+<td><code>mdm/customer/&gt;</code></td>
+<td>CRM system (real-time CPI iFlow)</td>
+</tr>
+<tr>
+<td><code>mdm.erp.vendor.scheduled.queue</code></td>
+<td>Persistent</td>
+<td><code>mdm/vendor/&gt;</code></td>
+<td>ERP system (nightly CPI iFlow)</td>
+</tr>
+<tr>
+<td><code>mdm.wms.material.lastvalue.queue</code></td>
+<td>Last-Value</td>
+<td><code>mdm/material/&gt;</code></td>
+<td>WMS (state sync, latest only)</td>
+</tr>
+<tr>
+<td><code>mdm.audit.all.queue</code></td>
+<td>Persistent</td>
+<td><code>mdm/&gt;</code></td>
+<td>Audit / compliance service</td>
+</tr>
+<tr>
+<td><code>mdm.cache.invalidation.queue</code></td>
+<td>Non-persistent</td>
+<td><code>mdm/&gt;</code></td>
+<td>Internal Redis invalidation</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="kafka-topic-design-for-mdm">Kafka Topic Design for MDM<a class="headerlink" href="#kafka-topic-design-for-mdm" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Topic per object type — compacted:
+  mdm.customer.events        (cleanup.policy=compact)
+  mdm.vendor.events          (cleanup.policy=compact)
+  mdm.material.events        (cleanup.policy=compact)
+
+Key:   objectId              (enables per-key compaction)
+Value: MdmEvent JSON         (full object snapshot + changedFields[])
+
+Consumer groups:
+  mdm-crm-consumer-group     → mdm.customer.events
+  mdm-erp-consumer-group     → mdm.vendor.events
+  mdm-wms-consumer-group     → mdm.material.events
+  mdm-audit-consumer-group   → mdm.*  (all topics)
+</code></pre></div>
+<h3 id="redpanda-vs-kafka">Redpanda vs Kafka<a class="headerlink" href="#redpanda-vs-kafka" title="Permanent link">&para;</a></h3>
+<p><strong>Redpanda is the strongest single recommendation</strong> if you choose the Kafka path:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Kafka (Strimzi)</th>
+<th>Redpanda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protocol</td>
+<td>Kafka protocol</td>
+<td>Kafka protocol (compatible)</td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>JVM</td>
+<td>C++ (no JVM)</td>
+</tr>
+<tr>
+<td>ZooKeeper/KRaft</td>
+<td>KRaft required</td>
+<td>Not needed</td>
+</tr>
+<tr>
+<td>Throughput per node</td>
+<td>High</td>
+<td>~10x higher</td>
+</tr>
+<tr>
+<td>Operational complexity</td>
+<td>Medium</td>
+<td>Low (single binary)</td>
+</tr>
+<tr>
+<td>Kafka client compatibility</td>
+<td>Native</td>
+<td>Full (drop-in replacement)</td>
+</tr>
+<tr>
+<td>Debezium / Kafka Connect</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>KEDA scaler</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

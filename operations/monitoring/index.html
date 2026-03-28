@@ -1,0 +1,3069 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Sierra MDM Platform — Architecture and Requirements">
+      
+      
+        <meta name="author" content="Sierra MDM Team">
+      
+      
+      
+        <link rel="prev" href="../../technical-architecture/data-layer/">
+      
+      
+        <link rel="next" href="../cost/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Autonomous Monitoring - Sierra MDM Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#autonomous-monitoring-architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sierra MDM Platform" class="md-header__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sierra MDM Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Autonomous Monitoring
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sierra MDM Platform" class="md-nav__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sierra MDM Platform
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../goals-objectives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Goals & Objectives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benefits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benefits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assumptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assumptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scope
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Data Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/centrally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Centrally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/locally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Locally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/not-in-sap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Not Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Requirements
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Requirements
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/non-functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Non-Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/open-questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDM Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MDM Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/lead-system-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lead System Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/integration-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rbac-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RBAC and Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/data-enrichment-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Enrichment Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/compute-options/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compute Options (Kyma vs AKS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/event-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Broker (AEM vs Kafka)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/data-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Layer (MongoDB & Redis)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Monitoring
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-under-observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Under Observation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-pillars-autonomy-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Pillars + Autonomy Layer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layer-1-observability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layer 1 — Observability
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layer 1 — Observability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metrics-kyma-metricpipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics — Kyma MetricPipeline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metrics — Kyma MetricPipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metric-sources-per-component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metric Sources per Component
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aem-metrics-semp-api-polling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AEM Metrics — SEMP API Polling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpi-metrics-monitoring-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPI Metrics — Monitoring API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logs-sap-cloud-logging-via-kyma-logpipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logs — SAP Cloud Logging via Kyma LogPipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#traces-grafana-tempo-via-kyma-tracepipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Traces — Grafana Tempo via Kyma TracePipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layer-2-intelligence-and-alerting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layer 2 — Intelligence and Alerting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layer 2 — Intelligence and Alerting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prometheus-alert-rules-btp-kyma-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prometheus Alert Rules — BTP Kyma Specific
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alert-routing-alertmanager-sap-alert-notification-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alert Routing — Alertmanager + SAP Alert Notification Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anomaly-detection-vmanomaly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anomaly Detection — vmanomaly
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layer-3-autonomous-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layer 3 — Autonomous Action
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layer 3 — Autonomous Action">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-scaling-keda-on-kyma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Scaling — KEDA on Kyma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#self-healing-kubernetes-probes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Healing — Kubernetes Probes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-remediation-robusta-runbooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Remediation — Robusta Runbooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#circuit-breaker-resilience4j-in-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuit Breaker — Resilience4j (In-App)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-dashboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Dashboards
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Dashboards">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-1-end-to-end-mdm-pipeline-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard 1 — End-to-End MDM Pipeline Health
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-2-aem-cpi-integration-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard 2 — AEM + CPI Integration Health
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-3-consumer-fan-out-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard 3 — Consumer Fan-out Health
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-4-data-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard 4 — Data Quality
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-layout-kyma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Layout — Kyma
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cost/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost of Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI in MDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/spring-boot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Boot (MDM Core API)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/cpi-iflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPI iFlows & Groovy Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/kubernetes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes & Kyma Manifests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-under-observation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Under Observation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-pillars-autonomy-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three Pillars + Autonomy Layer
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#full-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layer-1-observability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layer 1 — Observability
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layer 1 — Observability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metrics-kyma-metricpipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics — Kyma MetricPipeline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metrics — Kyma MetricPipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metric-sources-per-component" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metric Sources per Component
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aem-metrics-semp-api-polling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AEM Metrics — SEMP API Polling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpi-metrics-monitoring-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPI Metrics — Monitoring API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logs-sap-cloud-logging-via-kyma-logpipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logs — SAP Cloud Logging via Kyma LogPipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#traces-grafana-tempo-via-kyma-tracepipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Traces — Grafana Tempo via Kyma TracePipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layer-2-intelligence-and-alerting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layer 2 — Intelligence and Alerting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layer 2 — Intelligence and Alerting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prometheus-alert-rules-btp-kyma-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prometheus Alert Rules — BTP Kyma Specific
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alert-routing-alertmanager-sap-alert-notification-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alert Routing — Alertmanager + SAP Alert Notification Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anomaly-detection-vmanomaly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anomaly Detection — vmanomaly
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#layer-3-autonomous-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layer 3 — Autonomous Action
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Layer 3 — Autonomous Action">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-scaling-keda-on-kyma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Scaling — KEDA on Kyma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#self-healing-kubernetes-probes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Healing — Kubernetes Probes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-remediation-robusta-runbooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Remediation — Robusta Runbooks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#circuit-breaker-resilience4j-in-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Circuit Breaker — Resilience4j (In-App)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-dashboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Dashboards
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Dashboards">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-1-end-to-end-mdm-pipeline-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard 1 — End-to-End MDM Pipeline Health
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-2-aem-cpi-integration-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard 2 — AEM + CPI Integration Health
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-3-consumer-fan-out-health" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard 3 — Consumer Fan-out Health
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-4-data-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dashboard 4 — Data Quality
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-layout-kyma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Layout — Kyma
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="autonomous-monitoring-architecture">Autonomous Monitoring Architecture<a class="headerlink" href="#autonomous-monitoring-architecture" title="Permanent link">&para;</a></h1>
+<h2 id="architecture-under-observation">Architecture Under Observation<a class="headerlink" href="#architecture-under-observation" title="Permanent link">&para;</a></h2>
+<p>The monitoring strategy covers every layer of the BTP Kyma MDM stack:</p>
+<div class="highlight"><pre><span></span><code>┌──────────────────────── SAP BTP ──────────────────────────────────────┐
+│                                                                        │
+│  ┌─────────────────── Kyma Runtime ────────────────────────────────┐  │
+│  │                                                                  │  │
+│  │  Kyma API Gateway (Ory + Istio) ◄── [M1] Istio/Envoy metrics   │  │
+│  │         │                                                        │  │
+│  │  ┌──────▼────────────────────────────────────────────────────┐  │  │
+│  │  │                    MDM Namespace                           │  │  │
+│  │  │  mdm-core-api  ◄── [M2] Micrometer /actuator/prometheus   │  │  │
+│  │  │  schema-svc    ◄── [M2] Micrometer                        │  │  │
+│  │  │  consumer-reg  ◄── [M2] Micrometer                        │  │  │
+│  │  │  scheduler-svc ◄── [M2] Quartz metrics + Micrometer       │  │  │
+│  │  │  change-tracker◄── [M2] Micrometer                        │  │  │
+│  │  └──────┬──────────────────────┬──────────────────┬──────────┘  │  │
+│  │         │ write                │ read             │ publish      │  │
+│  │  ┌──────▼──┐            ┌──────▼──┐        ┌─────▼──────────┐  │  │
+│  │  │ MongoDB │◄──[M3]     │  Redis  │◄──[M4] │  AEM Client    │  │  │
+│  │  │(Operator│mongodb_exp │ (BTP    │redis_exp│  (AMQP/REST)   │  │  │
+│  │  │on Kyma) │            │  HSO)   │        └────────────────┘  │  │
+│  │  └─────────┘            └─────────┘                            │  │
+│  │                                                                  │  │
+│  │  ┌────────────────────────────────────────────────────────────┐ │  │
+│  │  │  Kyma Telemetry (OTel Collector + FluentBit — managed)     │ │  │
+│  │  │  MetricPipeline → SAP Cloud Logging / Grafana Cloud        │ │  │
+│  │  │  LogPipeline    → SAP Cloud Logging (OpenSearch)           │ │  │
+│  │  │  TracePipeline  → Grafana Tempo                            │ │  │
+│  │  └────────────────────────────────────────────────────────────┘ │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+│                                                                        │
+│  SAP AEM ◄──────────── [M5] AEM SEMP API + Solace metrics             │
+│  SAP CPI ◄──────────── [M6] CPI Monitoring API + Error Inbox          │
+└────────────────────────────────────────────────────────────────────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              ▼               ▼               ▼
+           S/4HANA           CRM           WMS/ERP
+         [M7] IDoc/          [M7] REST     [M7] IDoc
+         delivery status     response      response
+</code></pre></div>
+<p><strong>Monitoring probe points:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Ref</th>
+<th>Layer</th>
+<th>What is Monitored</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1</td>
+<td>Kyma API Gateway</td>
+<td>Request rate, latency, error rate per API endpoint</td>
+</tr>
+<tr>
+<td>M2</td>
+<td>MDM Microservices</td>
+<td>JVM, HTTP, business metrics, circuit breaker state</td>
+</tr>
+<tr>
+<td>M3</td>
+<td>MongoDB on Kyma</td>
+<td>Ops/s, replication lag, Change Stream health, connection pool</td>
+</tr>
+<tr>
+<td>M4</td>
+<td>Redis (BTP HSO)</td>
+<td>Cache hit/miss rate, memory, evictions, latency</td>
+</tr>
+<tr>
+<td>M5</td>
+<td>SAP AEM</td>
+<td>Queue depth per consumer queue, message throughput, DLQ count</td>
+</tr>
+<tr>
+<td>M6</td>
+<td>SAP CPI</td>
+<td>iFlow success/failure rate, processing time, Error Inbox count</td>
+</tr>
+<tr>
+<td>M7</td>
+<td>Satellite systems</td>
+<td>CPI delivery outcome (success / retry / DLQ) per iFlow</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="three-pillars-autonomy-layer">Three Pillars + Autonomy Layer<a class="headerlink" href="#three-pillars-autonomy-layer" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>┌────────────────────────────────────────────────────────────┐
+│                 AUTONOMOUS ACTION LAYER                     │
+│  KEDA auto-scale │ K8s self-heal │ Robusta auto-remediate  │
+└───────────────────────────┬────────────────────────────────┘
+                            │ triggers
+┌───────────────────────────▼────────────────────────────────┐
+│            INTELLIGENCE / ALERTING LAYER                    │
+│  Prometheus Alertmanager │ vmanomaly │ SAP Alert Notif Svc  │
+└───────────────────────────┬────────────────────────────────┘
+                            │ feeds
+┌───────────────────────────▼────────────────────────────────┐
+│                  OBSERVABILITY LAYER                        │
+│  Kyma Telemetry │ SAP Cloud Logging │ Grafana Tempo         │
+│  Prometheus │ AEM SEMP │ CPI Monitoring API                  │
+└────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<hr />
+<h2 id="full-stack">Full Stack<a class="headerlink" href="#full-stack" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Tool</th>
+<th>Hosted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Metrics collection</td>
+<td>Prometheus (via Kyma Telemetry MetricPipeline)</td>
+<td>Kyma managed</td>
+</tr>
+<tr>
+<td>Long-term metrics</td>
+<td>Thanos or Grafana Cloud</td>
+<td>External</td>
+</tr>
+<tr>
+<td>Logs</td>
+<td>SAP Cloud Logging (OpenSearch) via Kyma LogPipeline</td>
+<td>BTP managed</td>
+</tr>
+<tr>
+<td>Traces</td>
+<td>Grafana Tempo via Kyma TracePipeline + OTel Java agent</td>
+<td>External</td>
+</tr>
+<tr>
+<td>Dashboards</td>
+<td>Grafana</td>
+<td>External / Grafana Cloud</td>
+</tr>
+<tr>
+<td>AEM monitoring</td>
+<td>AEM SEMP API + Solace metrics</td>
+<td>BTP managed</td>
+</tr>
+<tr>
+<td>CPI monitoring</td>
+<td>CPI Monitoring API + CPI Error Inbox</td>
+<td>BTP managed</td>
+</tr>
+<tr>
+<td>Anomaly detection</td>
+<td>VictoriaMetrics vmanomaly</td>
+<td>Kyma self-managed</td>
+</tr>
+<tr>
+<td>Alerting</td>
+<td>Prometheus Alertmanager + SAP Alert Notification Service</td>
+<td>Kyma + BTP</td>
+</tr>
+<tr>
+<td>Auto-scaling</td>
+<td>KEDA (built-in Kyma) driven by AEM queue depth</td>
+<td>Kyma built-in</td>
+</tr>
+<tr>
+<td>Self-healing</td>
+<td>Kubernetes liveness/readiness probes</td>
+<td>K8s native</td>
+</tr>
+<tr>
+<td>Auto-remediation</td>
+<td>Robusta runbooks</td>
+<td>Kyma self-managed</td>
+</tr>
+<tr>
+<td>Circuit breaker</td>
+<td>Resilience4j (in-app, Spring Boot)</td>
+<td>In-process</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="layer-1-observability">Layer 1 — Observability<a class="headerlink" href="#layer-1-observability" title="Permanent link">&para;</a></h2>
+<h3 id="metrics-kyma-metricpipeline">Metrics — Kyma MetricPipeline<a class="headerlink" href="#metrics-kyma-metricpipeline" title="Permanent link">&para;</a></h3>
+<p>Kyma's managed OTel Collector scrapes all pods automatically. No manual Prometheus DaemonSet install.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry.kyma-project.io/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MetricPipeline</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm-metrics</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">input</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">          </span><span class="c1"># scrapes /actuator/prometheus from all pods</span>
+<span class="w">    </span><span class="nt">runtime</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">          </span><span class="c1"># K8s runtime metrics (kube-state-metrics)</span>
+<span class="w">    </span><span class="nt">istio</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">          </span><span class="c1"># Istio/Envoy sidecar metrics (API Gateway layer)</span>
+<span class="w">  </span><span class="nt">output</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">endpoint</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://your-grafana-cloud-otlp-endpoint</span>
+<span class="w">      </span><span class="nt">authentication</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">basic</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">user</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">grafana-secret</span><span class="p p-Indicator">,</span><span class="nt"> key</span><span class="p">:</span><span class="w"> </span><span class="nv">username</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="nt">password</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">grafana-secret</span><span class="p p-Indicator">,</span><span class="nt"> key</span><span class="p">:</span><span class="w"> </span><span class="nv">password</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<h4 id="metric-sources-per-component">Metric Sources per Component<a class="headerlink" href="#metric-sources-per-component" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Exporter / Source</th>
+<th>Key Metrics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mdm-core-api</code></td>
+<td>Micrometer <code>/actuator/prometheus</code></td>
+<td>HTTP rate, latency p99, error rate, circuit breaker state</td>
+</tr>
+<tr>
+<td><code>schema-service</code></td>
+<td>Micrometer</td>
+<td>Schema validation failure rate</td>
+</tr>
+<tr>
+<td><code>consumer-registry</code></td>
+<td>Micrometer</td>
+<td>Consumer registration count, lookup latency</td>
+</tr>
+<tr>
+<td><code>scheduler-svc</code></td>
+<td>Micrometer + Quartz JMX</td>
+<td>Job last run timestamp, job execution duration, missed jobs</td>
+</tr>
+<tr>
+<td><code>change-tracker</code></td>
+<td>Micrometer</td>
+<td>Field diff computation time, change record write rate</td>
+</tr>
+<tr>
+<td>MongoDB (on Kyma)</td>
+<td><code>mongodb_exporter</code> sidecar</td>
+<td>Ops/s, connections, replication lag, Change Stream active</td>
+</tr>
+<tr>
+<td>Redis (BTP HSO)</td>
+<td><code>redis_exporter</code></td>
+<td>Hit rate, miss rate, memory usage, eviction count</td>
+</tr>
+<tr>
+<td>Kyma API Gateway</td>
+<td>Istio Envoy sidecar</td>
+<td>Ingress requests/s, latency p95/p99, 4xx/5xx rate</td>
+</tr>
+<tr>
+<td>Kyma Pods</td>
+<td><code>kube-state-metrics</code></td>
+<td>Pod restarts, OOMKills, pending pods, resource saturation</td>
+</tr>
+</tbody>
+</table>
+<h4 id="aem-metrics-semp-api-polling">AEM Metrics — SEMP API Polling<a class="headerlink" href="#aem-metrics-semp-api-polling" title="Permanent link">&para;</a></h4>
+<p>AEM (Solace) exposes queue statistics via the SEMP REST API. A lightweight scraper sidecar polls it and exposes Prometheus metrics.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># aem-metrics-scraper — runs as sidecar in monitoring namespace</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">scrape_aem_queues</span><span class="p">():</span>
+    <span class="n">queues</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mdm.crm.customer.realtime.queue&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;mdm.erp.vendor.scheduled.queue&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;mdm.wms.material.lastvalue.queue&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;mdm.audit.all.queue&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">queue</span> <span class="ow">in</span> <span class="n">queues</span><span class="p">:</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">AEM_SEMP_URL</span><span class="si">}</span><span class="s2">/msgVpns/</span><span class="si">{</span><span class="n">MSG_VPN</span><span class="si">}</span><span class="s2">/queues/</span><span class="si">{</span><span class="n">queue</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">auth</span><span class="o">=</span><span class="p">(</span><span class="n">AEM_USER</span><span class="p">,</span> <span class="n">AEM_PASS</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">gauge</span><span class="p">(</span><span class="s2">&quot;aem_queue_message_count&quot;</span><span class="p">,</span>  <span class="n">data</span><span class="p">[</span><span class="s2">&quot;msgs&quot;</span><span class="p">][</span><span class="s2">&quot;count&quot;</span><span class="p">],</span>   <span class="n">queue</span><span class="o">=</span><span class="n">queue</span><span class="p">)</span>
+        <span class="n">gauge</span><span class="p">(</span><span class="s2">&quot;aem_queue_consumer_count&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;consumers&quot;</span><span class="p">][</span><span class="s2">&quot;count&quot;</span><span class="p">],</span> <span class="n">queue</span><span class="o">=</span><span class="n">queue</span><span class="p">)</span>
+        <span class="n">gauge</span><span class="p">(</span><span class="s2">&quot;aem_queue_dlq_count&quot;</span><span class="p">,</span>      <span class="n">data</span><span class="p">[</span><span class="s2">&quot;msgSpoolUsage&quot;</span><span class="p">],</span>   <span class="n">queue</span><span class="o">=</span><span class="n">queue</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="cpi-metrics-monitoring-api">CPI Metrics — Monitoring API<a class="headerlink" href="#cpi-metrics-monitoring-api" title="Permanent link">&para;</a></h4>
+<p>CPI provides a REST Monitoring API for iFlow execution statistics. Polled every 5 minutes.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># cpi-metrics-scraper</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">scrape_cpi_iflows</span><span class="p">():</span>
+    <span class="n">iflows</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;S4_BusinessPartner_To_MDM_Customer&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;MDM_Customer_To_CRM_Realtime&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;MDM_Vendor_To_ERP_NightlyBatch&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;MDM_Material_To_WMS_Realtime&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">iflow</span> <span class="ow">in</span> <span class="n">iflows</span><span class="p">:</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CPI_MONITORING_URL</span><span class="si">}</span><span class="s2">/MessageProcessingLogs?$filter=IntegrationFlowName eq &#39;</span><span class="si">{</span><span class="n">iflow</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">get_token</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="n">msgs</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;d&quot;</span><span class="p">][</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msgs</span> <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;Status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;COMPLETED&quot;</span><span class="p">)</span>
+        <span class="n">failed</span>  <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">msgs</span> <span class="k">if</span> <span class="n">m</span><span class="p">[</span><span class="s2">&quot;Status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;FAILED&quot;</span><span class="p">)</span>
+        <span class="n">gauge</span><span class="p">(</span><span class="s2">&quot;cpi_iflow_success_total&quot;</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">iflow</span><span class="o">=</span><span class="n">iflow</span><span class="p">)</span>
+        <span class="n">gauge</span><span class="p">(</span><span class="s2">&quot;cpi_iflow_failed_total&quot;</span><span class="p">,</span>  <span class="n">failed</span><span class="p">,</span>  <span class="n">iflow</span><span class="o">=</span><span class="n">iflow</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h3 id="logs-sap-cloud-logging-via-kyma-logpipeline">Logs — SAP Cloud Logging via Kyma LogPipeline<a class="headerlink" href="#logs-sap-cloud-logging-via-kyma-logpipeline" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry.kyma-project.io/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LogPipeline</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm-logs</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">input</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">application</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">namespaces</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">include</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;mdm&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">containers</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">exclude</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;istio-proxy&quot;</span><span class="p p-Indicator">]</span><span class="w">   </span><span class="c1"># exclude noisy sidecar logs</span>
+<span class="w">  </span><span class="nt">filter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm.*</span>
+<span class="w">      </span><span class="nt">record</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cluster</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kyma-mdm-prod</span>
+<span class="w">        </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="w">  </span><span class="nt">output</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">http</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">host</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">sap-cloud-logging-secret</span><span class="p p-Indicator">,</span><span class="nt"> key</span><span class="p">:</span><span class="w"> </span><span class="nv">ingest-host</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">user</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">sap-cloud-logging-secret</span><span class="p p-Indicator">,</span><span class="nt"> key</span><span class="p">:</span><span class="w"> </span><span class="nv">ingest-user</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">password</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">sap-cloud-logging-secret</span><span class="p p-Indicator">,</span><span class="nt"> key</span><span class="p">:</span><span class="w"> </span><span class="nv">ingest-password</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">uri</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/ela/ingest/logs/v1/json</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;443&quot;</span>
+</code></pre></div>
+<p>All Spring Boot services emit structured JSON logs with <code>traceId</code> and <code>spanId</code> injected by the OTel agent — enabling log-to-trace correlation in Grafana.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-06-20T14:30:01.234Z&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;level&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;service&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;mdm-core-api&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;traceId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4bf92f3577b34da6a3ce929d0e0e4736&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;spanId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00f067aa0ba902b7&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Published eventType=changed objectId=MDM-CUST-001 topic=mdm/customer/changed/v1/S4HANA&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<h3 id="traces-grafana-tempo-via-kyma-tracepipeline">Traces — Grafana Tempo via Kyma TracePipeline<a class="headerlink" href="#traces-grafana-tempo-via-kyma-tracepipeline" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telemetry.kyma-project.io/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TracePipeline</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm-traces</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">output</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">endpoint</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://your-grafana-tempo-endpoint</span>
+<span class="w">      </span><span class="nt">authentication</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">basic</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">user</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">grafana-secret</span><span class="p p-Indicator">,</span><span class="nt"> key</span><span class="p">:</span><span class="w"> </span><span class="nv">tempo-user</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">          </span><span class="nt">password</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">valueFrom</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">secretKeyRef</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">grafana-secret</span><span class="p p-Indicator">,</span><span class="nt"> key</span><span class="p">:</span><span class="w"> </span><span class="nv">tempo-password</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<p>End-to-end trace path for an inbound S/4HANA change:</p>
+<div class="highlight"><pre><span></span><code>CPI iFlow (S4→MDM)
+    └── HTTP POST /api/v1/objects/customer          [span: http.server]
+            └── MdmCoreService.updateObject()       [span: mdm.update]
+                    ├── FieldChangeTracker.diff()   [span: mdm.diff]
+                    ├── MongoDB save()              [span: db.mongodb]
+                    ├── ChangeRecord save()         [span: db.mongodb]
+                    └── AemEventPublisher.publish() [span: messaging.publish]
+</code></pre></div>
+<p>Sampling: 100% for errors and slow requests (&gt;2s), 10% for normal traffic.</p>
+<hr />
+<h2 id="layer-2-intelligence-and-alerting">Layer 2 — Intelligence and Alerting<a class="headerlink" href="#layer-2-intelligence-and-alerting" title="Permanent link">&para;</a></h2>
+<h3 id="prometheus-alert-rules-btp-kyma-specific">Prometheus Alert Rules — BTP Kyma Specific<a class="headerlink" href="#prometheus-alert-rules-btp-kyma-specific" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">groups</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm-kyma-critical</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+
+<span class="w">  </span><span class="c1"># MDM API Gateway (Istio)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MDMApiGatewayErrorRateHigh</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">rate(istio_requests_total{destination_service_name=&quot;mdm-core-api&quot;,</span>
+<span class="w">           </span><span class="no">response_code=~&quot;5..&quot;}[5m]) /</span>
+<span class="w">      </span><span class="no">rate(istio_requests_total{destination_service_name=&quot;mdm-core-api&quot;}[5m]) &gt; 0.05</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">critical</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">gateway</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MDM</span><span class="nv"> </span><span class="s">API</span><span class="nv"> </span><span class="s">Gateway</span><span class="nv"> </span><span class="s">5xx</span><span class="nv"> </span><span class="s">rate</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">5%</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">3</span><span class="nv"> </span><span class="s">minutes&quot;</span>
+
+<span class="w">  </span><span class="c1"># MDM Core API</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MDMCoreApiDown</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">up{job=&quot;mdm-core-api&quot;} == 0</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">critical</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">api</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;mdm-core-api</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">reachable</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">MDM</span><span class="nv"> </span><span class="s">writes</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">reads</span><span class="nv"> </span><span class="s">are</span><span class="nv"> </span><span class="s">down&quot;</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MDMCoreApiHighLatency</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">histogram_quantile(0.99, rate(http_server_requests_seconds_bucket{</span>
+<span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">job=&quot;mdm-core-api&quot;}[5m])) &gt; 2</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">warning</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">api</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MDM</span><span class="nv"> </span><span class="s">API</span><span class="nv"> </span><span class="s">p99</span><span class="nv"> </span><span class="s">latency</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">2s&quot;</span>
+
+<span class="w">  </span><span class="c1"># MongoDB Change Stream (CDC)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MongoChangeStreamInactive</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm_mongo_changestream_active == 0</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">critical</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">cdc</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MongoDB</span><span class="nv"> </span><span class="s">Change</span><span class="nv"> </span><span class="s">Stream</span><span class="nv"> </span><span class="s">listener</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">active</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">CDC</span><span class="nv"> </span><span class="s">pipeline</span><span class="nv"> </span><span class="s">broken&quot;</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MongoReplicationLagHigh</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mongodb_replication_lag_seconds &gt; 30</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">warning</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">database</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;MongoDB</span><span class="nv"> </span><span class="s">replication</span><span class="nv"> </span><span class="s">lag</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">30s</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">risk</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">stale</span><span class="nv"> </span><span class="s">reads&quot;</span>
+
+<span class="w">  </span><span class="c1"># Redis (BTP HSO)</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RedisCacheHitRateLow</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">rate(redis_keyspace_hits_total[5m]) /</span>
+<span class="w">      </span><span class="no">(rate(redis_keyspace_hits_total[5m]) + rate(redis_keyspace_misses_total[5m])) &lt; 0.7</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">warning</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Redis</span><span class="nv"> </span><span class="s">cache</span><span class="nv"> </span><span class="s">hit</span><span class="nv"> </span><span class="s">rate</span><span class="nv"> </span><span class="s">&lt;</span><span class="nv"> </span><span class="s">70%</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">MongoDB</span><span class="nv"> </span><span class="s">under</span><span class="nv"> </span><span class="s">unexpectedly</span><span class="nv"> </span><span class="s">high</span><span class="nv"> </span><span class="s">read</span><span class="nv"> </span><span class="s">load&quot;</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RedisMemoryHigh</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis_memory_used_bytes / redis_memory_max_bytes &gt; 0.85</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">warning</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">cache</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Redis</span><span class="nv"> </span><span class="s">memory</span><span class="nv"> </span><span class="s">utilisation</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">85%</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">evictions</span><span class="nv"> </span><span class="s">likely&quot;</span>
+
+<span class="w">  </span><span class="c1"># SAP AEM</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AemConsumerQueueDepthHigh</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aem_queue_message_count{queue=~&quot;mdm\\..*\\.queue&quot;} &gt; 50000</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">warning</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">aem</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;AEM</span><span class="nv"> </span><span class="s">queue</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.queue</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$value</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">undelivered</span><span class="nv"> </span><span class="s">messages&quot;</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AemDlqMessagePresent</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aem_queue_dlq_count{queue=~&quot;mdm\\..*&quot;} &gt; 0</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">critical</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">aem</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Messages</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">AEM</span><span class="nv"> </span><span class="s">DLQ</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.queue</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">delivery</span><span class="nv"> </span><span class="s">failures</span><span class="nv"> </span><span class="s">need</span><span class="nv"> </span><span class="s">investigation&quot;</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AemNoConsumerOnQueue</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aem_queue_consumer_count{queue=~&quot;mdm\\..*\\.queue&quot;} == 0</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">critical</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">aem</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;No</span><span class="nv"> </span><span class="s">active</span><span class="nv"> </span><span class="s">consumer</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">AEM</span><span class="nv"> </span><span class="s">queue</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.queue</span><span class="nv"> </span><span class="s">}}&quot;</span>
+
+<span class="w">  </span><span class="c1"># SAP CPI</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CpiIFlowFailureRateHigh</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;</span>
+<span class="w">      </span><span class="no">rate(cpi_iflow_failed_total[10m]) /</span>
+<span class="w">      </span><span class="no">(rate(cpi_iflow_success_total[10m]) + rate(cpi_iflow_failed_total[10m])) &gt; 0.1</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">critical</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">cpi</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CPI</span><span class="nv"> </span><span class="s">iFlow</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.iflow</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">failure</span><span class="nv"> </span><span class="s">rate</span><span class="nv"> </span><span class="s">&gt;</span><span class="nv"> </span><span class="s">10%&quot;</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CpiErrorInboxNonEmpty</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cpi_error_inbox_count &gt; 0</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">warning</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">cpi</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">$value</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">messages</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">CPI</span><span class="nv"> </span><span class="s">Error</span><span class="nv"> </span><span class="s">Inbox</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">manual</span><span class="nv"> </span><span class="s">review</span><span class="nv"> </span><span class="s">required&quot;</span>
+
+<span class="w">  </span><span class="c1"># Scheduler</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ScheduledDeltaJobMissed</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm_scheduler_last_run_seconds{job_name=~&quot;.*delta.*&quot;} &gt; 90000</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">warning</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">scheduler</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Delta</span><span class="nv"> </span><span class="s">sync</span><span class="nv"> </span><span class="s">job</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.job_name</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">has</span><span class="nv"> </span><span class="s">not</span><span class="nv"> </span><span class="s">run</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">25+</span><span class="nv"> </span><span class="s">hours&quot;</span>
+
+<span class="w">  </span><span class="c1"># Kyma Pod Health</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MDMPodCrashLooping</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rate(kube_pod_container_status_restarts_total{namespace=&quot;mdm&quot;}[15m]) &gt; 0</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">critical</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Pod</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">$labels.pod</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">MDM</span><span class="nv"> </span><span class="s">namespace</span><span class="nv"> </span><span class="s">is</span><span class="nv"> </span><span class="s">crash-looping&quot;</span>
+</code></pre></div>
+<h3 id="alert-routing-alertmanager-sap-alert-notification-service">Alert Routing — Alertmanager + SAP Alert Notification Service<a class="headerlink" href="#alert-routing-alertmanager-sap-alert-notification-service" title="Permanent link">&para;</a></h3>
+<p>Two parallel alert channels:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Alertmanager — routes to Slack / PagerDuty</span>
+<span class="nt">route</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack-warnings</span>
+<span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">alertname</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">layer</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">routes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">critical</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pagerduty-oncall</span>
+<span class="w">    </span><span class="nt">repeat_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30m</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">warning</span><span class="p p-Indicator">,</span><span class="nt"> layer</span><span class="p">:</span><span class="w"> </span><span class="nv">cpi</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack-integration-team</span><span class="w">    </span><span class="c1"># CPI issues → integration team, not oncall</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> severity</span><span class="p">:</span><span class="w"> </span><span class="nv">warning</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack-mdm-alerts</span>
+
+<span class="nt">receivers</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pagerduty-oncall</span>
+<span class="w">  </span><span class="nt">pagerduty_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">service_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${PAGERDUTY_KEY}</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">.CommonAnnotations.summary</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack-mdm-alerts</span>
+<span class="w">  </span><span class="nt">slack_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">channel</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#mdm-alerts&#39;</span>
+<span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;[{{</span><span class="nv"> </span><span class="s">.Status</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">toUpper</span><span class="nv"> </span><span class="s">}}]</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">.CommonLabels.alertname</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">.CommonAnnotations.summary</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">slack-integration-team</span>
+<span class="w">  </span><span class="nt">slack_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">channel</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;#mdm-integration&#39;</span>
+<span class="w">    </span><span class="nt">text</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;CPI</span><span class="nv"> </span><span class="s">alert:</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">.CommonAnnotations.summary</span><span class="nv"> </span><span class="s">}}&#39;</span>
+</code></pre></div>
+<p>SAP Alert Notification Service (BTP) is used in parallel for BTP-native alerts (AEM health events, CPI system alerts) that originate within the BTP platform itself and cannot be scraped by Prometheus.</p>
+<h3 id="anomaly-detection-vmanomaly">Anomaly Detection — vmanomaly<a class="headerlink" href="#anomaly-detection-vmanomaly" title="Permanent link">&para;</a></h3>
+<p><code>vmanomaly</code> runs in the Kyma monitoring namespace and self-calibrates against 2 weeks of historical data.</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Model</th>
+<th>What it detects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MDM object creation rate</td>
+<td>z-score</td>
+<td>Unusual bulk loads or dead inbound pipelines</td>
+</tr>
+<tr>
+<td>AEM queue depth per queue</td>
+<td>Prophet (seasonal)</td>
+<td>Queues growing faster than expected for time of day</td>
+</tr>
+<tr>
+<td>CPI iFlow processing time</td>
+<td>MAD</td>
+<td>Sudden increase in integration processing time</td>
+</tr>
+<tr>
+<td>Redis cache miss rate</td>
+<td>z-score</td>
+<td>Cache invalidation storm or Redis memory pressure</td>
+</tr>
+<tr>
+<td>MongoDB change stream events/s</td>
+<td>z-score</td>
+<td>CDC pipeline stall or unexpected burst</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="layer-3-autonomous-action">Layer 3 — Autonomous Action<a class="headerlink" href="#layer-3-autonomous-action" title="Permanent link">&para;</a></h2>
+<h3 id="auto-scaling-keda-on-kyma">Auto-Scaling — KEDA on Kyma<a class="headerlink" href="#auto-scaling-keda-on-kyma" title="Permanent link">&para;</a></h3>
+<p>KEDA is built into Kyma. Scale targets are driven by AEM queue depth (primary) and Prometheus metrics (secondary).</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Scale consumer-registry based on AEM queue depth</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keda.sh/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ScaledObject</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm-core-api-scaler</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scaleTargetRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm-core-api</span>
+<span class="w">  </span><span class="nt">minReplicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">maxReplicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="nt">cooldownPeriod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+<span class="w">  </span><span class="nt">triggers</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">serverAddress</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://prometheus.monitoring.svc.cluster.local:9090</span>
+<span class="w">      </span><span class="nt">metricName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http_server_requests_active</span>
+<span class="w">      </span><span class="nt">query</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sum(rate(http_server_requests_seconds_count{job=&quot;mdm-core-api&quot;}[1m]))</span>
+<span class="w">      </span><span class="nt">threshold</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;50&quot;</span><span class="w">       </span><span class="c1"># scale up when &gt;50 req/s per replica</span>
+<span class="nn">---</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keda.sh/v1alpha1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ScaledObject</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">consumer-router-scaler</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scaleTargetRef</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">consumer-router-service</span>
+<span class="w">  </span><span class="nt">minReplicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">maxReplicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">  </span><span class="nt">cooldownPeriod</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">120</span>
+<span class="w">  </span><span class="nt">triggers</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">solace-event-queue</span>
+<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">solaceSempBaseURL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${AEM_SEMP_URL}</span>
+<span class="w">      </span><span class="nt">messageVpn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${AEM_MSG_VPN}</span>
+<span class="w">      </span><span class="nt">queueName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mdm.consumer-router.queue</span>
+<span class="w">      </span><span class="nt">messageCountTarget</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;500&quot;</span>
+<span class="w">      </span><span class="nt">authenticationRef</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">solace-auth-secret</span>
+</code></pre></div>
+<h3 id="self-healing-kubernetes-probes">Self-Healing — Kubernetes Probes<a class="headerlink" href="#self-healing-kubernetes-probes" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Applied to all MDM Spring Boot services</span>
+<span class="nt">livenessProbe</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">httpGet</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">/actuator/health/liveness</span><span class="p p-Indicator">,</span><span class="nt"> port</span><span class="p">:</span><span class="w"> </span><span class="nv">8080</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="w">  </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<span class="w">  </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="c1"># Kubernetes restarts pod automatically if liveness fails 3 times</span>
+
+<span class="nt">readinessProbe</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">httpGet</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">/actuator/health/readiness</span><span class="p p-Indicator">,</span><span class="nt"> port</span><span class="p">:</span><span class="w"> </span><span class="nv">8080</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">initialDelaySeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20</span>
+<span class="w">  </span><span class="nt">failureThreshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">  </span><span class="nt">periodSeconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+<span class="w">  </span><span class="c1"># Pod removed from Istio load balancer if readiness fails — no traffic sent to unhealthy pod</span>
+</code></pre></div>
+<p>Spring Boot Actuator health indicators report:
+- <code>db</code> — MongoDB connectivity
+- <code>redis</code> — Redis connectivity
+- <code>diskSpace</code> — JVM heap saturation
+- Custom: <code>aemConnection</code> — Solace JCSMPSession health</p>
+<h3 id="auto-remediation-robusta-runbooks">Auto-Remediation — Robusta Runbooks<a class="headerlink" href="#auto-remediation-robusta-runbooks" title="Permanent link">&para;</a></h3>
+<p>Robusta listens for Prometheus alerts and executes automated fix runbooks, posting enriched Slack notifications with metric graphs and action taken.</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@action</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">restart_mongo_changestream_listener</span><span class="p">(</span><span class="n">alert</span><span class="p">:</span> <span class="n">PrometheusKubernetesAlert</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Triggered by: MongoChangeStreamInactive</span>
+<span class="sd">    Fix: Rolling restart of mdm-core-api pod to re-establish Change Stream</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pod</span> <span class="o">=</span> <span class="n">alert</span><span class="o">.</span><span class="n">subject</span>
+    <span class="n">pod</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>  <span class="c1"># Kubernetes recreates it from Deployment spec</span>
+    <span class="n">alert</span><span class="o">.</span><span class="n">add_enrichment</span><span class="p">([</span>
+        <span class="n">MarkdownBlock</span><span class="p">(</span><span class="s2">&quot;Auto-restarted mdm-core-api pod to recover MongoDB Change Stream&quot;</span><span class="p">),</span>
+        <span class="n">GraphBlock</span><span class="p">(</span><span class="s2">&quot;mdm_mongo_changestream_active&quot;</span><span class="p">,</span> <span class="s2">&quot;Change Stream status&quot;</span><span class="p">)</span>
+    <span class="p">])</span>
+
+<span class="nd">@action</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">flush_mdm_cache_on_inconsistency</span><span class="p">(</span><span class="n">alert</span><span class="p">:</span> <span class="n">PrometheusKubernetesAlert</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Triggered by: RedisCacheHitRateLow (sustained)</span>
+<span class="sd">    Fix: Flush Redis cache for affected object type, force cache rebuild from MongoDB</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">object_type</span> <span class="o">=</span> <span class="n">alert</span><span class="o">.</span><span class="n">labels</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object_type&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span>
+    <span class="n">redis_client</span><span class="o">.</span><span class="n">delete_pattern</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mdm:</span><span class="si">{</span><span class="n">object_type</span><span class="si">}</span><span class="s2">:*&quot;</span><span class="p">)</span>
+    <span class="n">alert</span><span class="o">.</span><span class="n">add_enrichment</span><span class="p">([</span>
+        <span class="n">MarkdownBlock</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Redis cache flushed for objectType=</span><span class="si">{</span><span class="n">object_type</span><span class="si">}</span><span class="s2"> — will rebuild from MongoDB&quot;</span><span class="p">),</span>
+    <span class="p">])</span>
+
+<span class="nd">@action</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">trigger_cpi_error_inbox_notification</span><span class="p">(</span><span class="n">alert</span><span class="p">:</span> <span class="n">PrometheusKubernetesAlert</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Triggered by: CpiErrorInboxNonEmpty</span>
+<span class="sd">    Fix: Cannot auto-fix CPI errors (require human decision) — notify integration team with direct link</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">alert</span><span class="o">.</span><span class="n">add_enrichment</span><span class="p">([</span>
+        <span class="n">MarkdownBlock</span><span class="p">(</span><span class="s2">&quot;CPI Error Inbox has failed messages — manual review required&quot;</span><span class="p">),</span>
+        <span class="n">LinkBlock</span><span class="p">(</span><span class="s2">&quot;Open CPI Error Inbox&quot;</span><span class="p">,</span>
+                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CPI_BASE_URL</span><span class="si">}</span><span class="s2">/itspaces/shell/design/ErrorInbox&quot;</span><span class="p">)</span>
+    <span class="p">])</span>
+
+<span class="nd">@action</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">scale_up_consumer_router_manually</span><span class="p">(</span><span class="n">alert</span><span class="p">:</span> <span class="n">PrometheusKubernetesAlert</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Triggered by: AemConsumerQueueDepthHigh (when KEDA has not yet acted)</span>
+<span class="sd">    Fix: Manually bump replica count as an emergency measure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">patch_deployment</span><span class="p">(</span><span class="s2">&quot;mdm&quot;</span><span class="p">,</span> <span class="s2">&quot;consumer-router-service&quot;</span><span class="p">,</span> <span class="n">replicas</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">alert</span><span class="o">.</span><span class="n">add_enrichment</span><span class="p">([</span>
+        <span class="n">MarkdownBlock</span><span class="p">(</span><span class="s2">&quot;Emergency scale-up: consumer-router-service set to 10 replicas&quot;</span><span class="p">),</span>
+        <span class="n">GraphBlock</span><span class="p">(</span><span class="s2">&quot;aem_queue_message_count&quot;</span><span class="p">,</span> <span class="s2">&quot;AEM queue depth&quot;</span><span class="p">)</span>
+    <span class="p">])</span>
+</code></pre></div>
+<h3 id="circuit-breaker-resilience4j-in-app">Circuit Breaker — Resilience4j (In-App)<a class="headerlink" href="#circuit-breaker-resilience4j-in-app" title="Permanent link">&para;</a></h3>
+<p>Applied at the service layer to prevent cascade failures when MongoDB or Redis are temporarily unavailable.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// MongoDB read — falls back to Redis cache if MongoDB is unhealthy</span>
+<span class="nd">@CircuitBreaker</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mongoDb&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">fallbackMethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;fallbackToCache&quot;</span><span class="p">)</span>
+<span class="nd">@TimeLimiter</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;mongoDb&quot;</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="n">CompletableFuture</span><span class="o">&lt;</span><span class="n">MasterDataObject</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">getObject</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">CompletableFuture</span><span class="p">.</span><span class="na">supplyAsync</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">mongoRepository</span><span class="p">.</span><span class="na">findById</span><span class="p">(</span><span class="n">id</span><span class="p">).</span><span class="na">orElseThrow</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="n">CompletableFuture</span><span class="o">&lt;</span><span class="n">MasterDataObject</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">fallbackToCache</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">&quot;MongoDB circuit open for id={} — serving from Redis cache&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">CompletableFuture</span><span class="p">.</span><span class="na">supplyAsync</span><span class="p">(()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">redisCache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">id</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// AEM publish — falls back to local retry queue if AEM is temporarily unavailable</span>
+<span class="nd">@CircuitBreaker</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;aem&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">fallbackMethod</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;fallbackToLocalRetryQueue&quot;</span><span class="p">)</span>
+<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">publishToAem</span><span class="p">(</span><span class="n">MdmEvent</span><span class="w"> </span><span class="n">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">aemEventPublisher</span><span class="p">.</span><span class="na">publish</span><span class="p">(</span><span class="n">event</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">fallbackToLocalRetryQueue</span><span class="p">(</span><span class="n">MdmEvent</span><span class="w"> </span><span class="n">event</span><span class="p">,</span><span class="w"> </span><span class="n">Exception</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">log</span><span class="p">.</span><span class="na">warn</span><span class="p">(</span><span class="s">&quot;AEM circuit open — queuing event locally for retry: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">event</span><span class="p">.</span><span class="na">getEventId</span><span class="p">());</span>
+<span class="w">    </span><span class="n">localRetryQueue</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">event</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Circuit breaker states exported to Prometheus via Micrometer:</p>
+<div class="highlight"><pre><span></span><code>resilience4j_circuitbreaker_state{name=&quot;mongoDb&quot;, state=&quot;closed&quot;}  1
+resilience4j_circuitbreaker_state{name=&quot;aem&quot;,     state=&quot;open&quot;}    1
+</code></pre></div>
+<hr />
+<h2 id="key-dashboards">Key Dashboards<a class="headerlink" href="#key-dashboards" title="Permanent link">&para;</a></h2>
+<h3 id="dashboard-1-end-to-end-mdm-pipeline-health">Dashboard 1 — End-to-End MDM Pipeline Health<a class="headerlink" href="#dashboard-1-end-to-end-mdm-pipeline-health" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Panel</th>
+<th>Source</th>
+<th>Alert threshold</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inbound iFlow success rate (CPI)</td>
+<td>CPI Monitoring API</td>
+<td>&lt; 95% triggers warning</td>
+</tr>
+<tr>
+<td>AEM queue depth per consumer queue</td>
+<td>AEM SEMP API</td>
+<td>&gt; 50K triggers warning</td>
+</tr>
+<tr>
+<td>AEM DLQ count</td>
+<td>AEM SEMP API</td>
+<td>&gt; 0 triggers critical</td>
+</tr>
+<tr>
+<td>MDM API p99 latency</td>
+<td>Istio metrics</td>
+<td>&gt; 2s triggers warning</td>
+</tr>
+<tr>
+<td>MDM API error rate</td>
+<td>Istio metrics</td>
+<td>&gt; 5% triggers critical</td>
+</tr>
+<tr>
+<td>MongoDB Change Stream active</td>
+<td>Custom metric</td>
+<td>= 0 triggers critical</td>
+</tr>
+<tr>
+<td>Redis cache hit rate</td>
+<td>redis_exporter</td>
+<td>&lt; 70% triggers warning</td>
+</tr>
+<tr>
+<td>Scheduler last run per job</td>
+<td>Quartz metrics</td>
+<td>&gt; 25h triggers warning</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dashboard-2-aem-cpi-integration-health">Dashboard 2 — AEM + CPI Integration Health<a class="headerlink" href="#dashboard-2-aem-cpi-integration-health" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Per-queue message depth over time (all MDM queues)</li>
+<li>Per-iFlow execution success/failure rate (all CPI iFlows)</li>
+<li>CPI Error Inbox count trend</li>
+<li>AEM consumer connection count per queue</li>
+<li>End-to-end latency: S/4HANA push → MDM golden record → AEM published</li>
+</ul>
+<h3 id="dashboard-3-consumer-fan-out-health">Dashboard 3 — Consumer Fan-out Health<a class="headerlink" href="#dashboard-3-consumer-fan-out-health" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Per-consumer delivery success rate</li>
+<li>Field-change trigger rate (how often each consumer is notified)</li>
+<li>Consumers with zero deliveries in last 24 hours (possible dead consumer)</li>
+<li>Scheduled batch consumer last execution time</li>
+</ul>
+<h3 id="dashboard-4-data-quality">Dashboard 4 — Data Quality<a class="headerlink" href="#dashboard-4-data-quality" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Schema validation failure rate per object type</li>
+<li>Duplicate detection rate (potential merge candidates)</li>
+<li>Field change frequency heatmap (which fields change most often)</li>
+<li>Change record volume by module per day</li>
+</ul>
+<hr />
+<h2 id="deployment-layout-kyma">Deployment Layout — Kyma<a class="headerlink" href="#deployment-layout-kyma" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>SAP BTP Kyma Cluster
+│
+├── mdm namespace
+│   ├── mdm-core-api
+│   ├── schema-service
+│   ├── consumer-registry
+│   ├── scheduler-service
+│   ├── change-tracker
+│   ├── mongodb-exporter (sidecar/standalone)
+│   ├── redis-exporter   (sidecar/standalone)
+│   ├── aem-metrics-scraper
+│   └── cpi-metrics-scraper
+│
+├── monitoring namespace
+│   ├── Prometheus + Alertmanager
+│   ├── vmanomaly (anomaly detection)
+│   ├── Robusta   (auto-remediation runbooks)
+│   └── Grafana   (dashboards)
+│
+└── kyma-system namespace (managed by SAP)
+    ├── Kyma Telemetry (OTel Collector + FluentBit)  ──► SAP Cloud Logging
+    ├── Kyma TracePipeline                            ──► Grafana Tempo
+    ├── Kyma MetricPipeline                           ──► Grafana Cloud
+    └── KEDA operator
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

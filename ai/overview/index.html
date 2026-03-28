@@ -1,0 +1,2589 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Sierra MDM Platform — Architecture and Requirements">
+      
+      
+        <meta name="author" content="Sierra MDM Team">
+      
+      
+      
+        <link rel="prev" href="../../operations/cost/">
+      
+      
+        <link rel="next" href="../../code-reference/spring-boot/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>AI in MDM - Sierra MDM Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ai-in-mdm-architecture-and-monitoring" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sierra MDM Platform" class="md-header__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sierra MDM Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              AI in MDM
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sierra MDM Platform" class="md-nav__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sierra MDM Platform
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../goals-objectives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Goals & Objectives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benefits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benefits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assumptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assumptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scope
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Data Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/centrally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Centrally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/locally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Locally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/not-in-sap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Not Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Requirements
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Requirements
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/non-functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Non-Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../requirements/open-questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDM Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MDM Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/lead-system-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lead System Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/integration-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rbac-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RBAC and Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/data-enrichment-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Enrichment Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/compute-options/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compute Options (Kyma vs AKS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/event-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Broker (AEM vs Kafka)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/data-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Layer (MongoDB & Redis)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/cost/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost of Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI in MDM
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI in MDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-ai-in-architecture-and-feature-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. AI in Architecture and Feature Development
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. AI in Architecture and Feature Development">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-ai-accelerates-mdm-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where AI Accelerates MDM Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-assisted-schema-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI-Assisted Schema Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-generated-cpi-iflow-transform-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI-Generated CPI iFlow Transform Scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ai-in-monitoring-autonomous-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. AI in Monitoring — Autonomous Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. AI in Monitoring — Autonomous Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limitations-of-threshold-based-alerting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations of Threshold-Based Alerting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-monitoring-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI Monitoring Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-use-cases-in-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI Use Cases in Monitoring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AI Use Cases in Monitoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#error-detection-log-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Detection — Log Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anomaly-diagnosis-cross-layer-correlation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anomaly Diagnosis — Cross-Layer Correlation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-fix-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Fix Recommendations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#self-healing-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Healing Loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-cost-economics-token-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Cost Economics — Token Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Cost Economics — Token Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development-phase-feature-generation-costs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Phase — Feature Generation Costs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations-phase-monitoring-cost-per-event" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operations Phase — Monitoring Cost per Event
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations Phase — Monitoring Cost per Event">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#monthly-operations-cost-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monthly Operations Cost Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-optimisation-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Token Optimisation Strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-build-vs-buy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Build vs Buy
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/spring-boot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Boot (MDM Core API)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/cpi-iflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPI iFlows & Groovy Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/kubernetes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes & Kyma Manifests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-ai-in-architecture-and-feature-development" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. AI in Architecture and Feature Development
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. AI in Architecture and Feature Development">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-ai-accelerates-mdm-build" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where AI Accelerates MDM Build
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-assisted-schema-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI-Assisted Schema Definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-generated-cpi-iflow-transform-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI-Generated CPI iFlow Transform Scripts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-ai-in-monitoring-autonomous-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. AI in Monitoring — Autonomous Operations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. AI in Monitoring — Autonomous Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limitations-of-threshold-based-alerting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations of Threshold-Based Alerting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-monitoring-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI Monitoring Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ai-use-cases-in-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AI Use Cases in Monitoring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AI Use Cases in Monitoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#error-detection-log-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Detection — Log Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anomaly-diagnosis-cross-layer-correlation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anomaly Diagnosis — Cross-Layer Correlation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#auto-fix-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-Fix Recommendations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#self-healing-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Self-Healing Loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-cost-economics-token-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Cost Economics — Token Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Cost Economics — Token Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development-phase-feature-generation-costs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development Phase — Feature Generation Costs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations-phase-monitoring-cost-per-event" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Operations Phase — Monitoring Cost per Event
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations Phase — Monitoring Cost per Event">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#monthly-operations-cost-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monthly Operations Cost Model
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-optimisation-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Token Optimisation Strategies
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-build-vs-buy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Build vs Buy
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ai-in-mdm-architecture-and-monitoring">AI in MDM — Architecture and Monitoring<a class="headerlink" href="#ai-in-mdm-architecture-and-monitoring" title="Permanent link">&para;</a></h1>
+<p>AI improves the SierraDock MDM system in two distinct areas: <strong>accelerating development</strong> (reducing the cost and time to build features) and <strong>augmenting autonomous operations</strong> (moving beyond threshold-based alerting to intelligent error detection, root cause analysis, and self-healing).</p>
+<hr />
+<h2 id="1-ai-in-architecture-and-feature-development">1. AI in Architecture and Feature Development<a class="headerlink" href="#1-ai-in-architecture-and-feature-development" title="Permanent link">&para;</a></h2>
+<h3 id="where-ai-accelerates-mdm-build">Where AI Accelerates MDM Build<a class="headerlink" href="#where-ai-accelerates-mdm-build" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Development Task</th>
+<th>Without AI</th>
+<th>With AI (Claude API)</th>
+<th>Effort Reduction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Object schema definition from source system</td>
+<td>Manual field mapping workshops</td>
+<td>AI ingests source system metadata, proposes MDM object model</td>
+<td>~60%</td>
+</tr>
+<tr>
+<td>CPI iFlow Groovy transform scripts</td>
+<td>Developer writes from scratch</td>
+<td>AI generates from natural language description of mapping rules</td>
+<td>~70%</td>
+</tr>
+<tr>
+<td>Spring Boot service stubs</td>
+<td>Boilerplate from templates</td>
+<td>AI generates full service, repository, and test class</td>
+<td>~65%</td>
+</tr>
+<tr>
+<td>RBAC scope definitions (<code>xs-security.json</code>)</td>
+<td>Manual design + trial/error</td>
+<td>AI generates from object type + role description</td>
+<td>~50%</td>
+</tr>
+<tr>
+<td>Prometheus alert rules</td>
+<td>Manual PromQL authoring</td>
+<td>AI generates rules from plain-English alert intent</td>
+<td>~55%</td>
+</tr>
+<tr>
+<td>MongoDB index recommendations</td>
+<td>DBA review of query patterns</td>
+<td>AI analyses query shapes and recommends indexes</td>
+<td>~50%</td>
+</tr>
+<tr>
+<td>Unit and integration test generation</td>
+<td>Manual test authoring</td>
+<td>AI generates test cases from service interface</td>
+<td>~70%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ai-assisted-schema-definition">AI-Assisted Schema Definition<a class="headerlink" href="#ai-assisted-schema-definition" title="Permanent link">&para;</a></h3>
+<p>When onboarding a new master data object type, the AI agent:</p>
+<ol>
+<li>Accepts source system metadata (S/4HANA field catalog, Salesforce object schema, Workday field list)</li>
+<li>Proposes a normalised MDM <code>coreAttributes</code> model with field names, types, and constraints</li>
+<li>Identifies duplicate or semantically equivalent fields across source systems</li>
+<li>Suggests extension namespaces per satellite system</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="c1"># Example: AI-assisted schema generation via Claude API</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">anthropic</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">anthropic</span><span class="o">.</span><span class="n">Anthropic</span><span class="p">()</span>
+
+<span class="n">source_metadata</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">S/4HANA Business Partner fields:</span>
+<span class="s2">  BusinessPartner (Char 10), BusinessPartnerFullName (Char 81),</span>
+<span class="s2">  BusinessPartnerCategory (Char 1), Country (Char 3), PostalCode (Char 10)</span>
+
+<span class="s2">Salesforce Account fields:</span>
+<span class="s2">  AccountId, Name, BillingCountry, BillingPostalCode, Type, Industry</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-6&quot;</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span>
+        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        Given these source system fields, propose a normalised MDM Customer object model.</span>
+<span class="s2">        Output as JSON with coreAttributes (canonical fields), extensions.S4HANA</span>
+<span class="s2">        (SAP-specific fields), and extensions.CRM (CRM-specific fields).</span>
+
+<span class="s2">        Source metadata:</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">source_metadata</span><span class="si">}</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+    <span class="p">}]</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="ai-generated-cpi-iflow-transform-scripts">AI-Generated CPI iFlow Transform Scripts<a class="headerlink" href="#ai-generated-cpi-iflow-transform-scripts" title="Permanent link">&para;</a></h3>
+<p>Instead of manually writing Groovy mapping scripts:</p>
+<div class="highlight"><pre><span></span><code><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-6&quot;</span><span class="p">,</span>
+    <span class="n">max_tokens</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span>
+    <span class="n">messages</span><span class="o">=</span><span class="p">[{</span>
+        <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        Write a CPI Groovy script that transforms a SAP Business Partner OData payload</span>
+<span class="s2">        into the MDM Customer JSON format. Rules:</span>
+<span class="s2">        - Map BusinessPartnerFullName → coreAttributes.name</span>
+<span class="s2">        - Map Country → coreAttributes.country (ISO 3166 alpha-2)</span>
+<span class="s2">        - Map BusinessPartnerCategory: &#39;1&#39; → &#39;Person&#39;, &#39;2&#39; → &#39;Organisation&#39;</span>
+<span class="s2">        - Set metadata.leadSystem = &#39;S4HANA&#39;</span>
+<span class="s2">        - Preserve all address fields under coreAttributes</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+    <span class="p">}]</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Each generated script is reviewed by a developer before deployment to CPI — AI produces the first draft, human validates.</p>
+<hr />
+<h2 id="2-ai-in-monitoring-autonomous-operations">2. AI in Monitoring — Autonomous Operations<a class="headerlink" href="#2-ai-in-monitoring-autonomous-operations" title="Permanent link">&para;</a></h2>
+<h3 id="limitations-of-threshold-based-alerting">Limitations of Threshold-Based Alerting<a class="headerlink" href="#limitations-of-threshold-based-alerting" title="Permanent link">&para;</a></h3>
+<p>Traditional Prometheus alert rules are brittle:</p>
+<ul>
+<li>Rules fire when a threshold is crossed — they cannot explain <strong>why</strong></li>
+<li>High alert volume during incidents creates noise that obscures the root cause</li>
+<li>Robusta runbooks are hardcoded — they can only fix what was anticipated at design time</li>
+<li>No cross-system correlation: a CPI iFlow failure caused by a MongoDB slowdown requires a human to connect the two</li>
+</ul>
+<h3 id="ai-monitoring-architecture">AI Monitoring Architecture<a class="headerlink" href="#ai-monitoring-architecture" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>Alert / Log / Metric Event
+        │
+        ▼
+┌───────────────────────────────────────────────────────┐
+│              AI Monitoring Agent (Claude API)          │
+│                                                       │
+│  [1] Retrieve context                                 │
+│      - Recent logs from SAP Cloud Logging             │
+│      - Active Prometheus alerts                       │
+│      - AEM queue depth from SEMP API                  │
+│      - CPI Error Inbox entries                        │
+│      - Recent MongoDB / Redis metrics                 │
+│                                                       │
+│  [2] Analyse and correlate                            │
+│      - Identify root cause across layers              │
+│      - Determine blast radius (which consumers affected)│
+│      - Classify: transient / systemic / data issue    │
+│                                                       │
+│  [3] Propose action                                   │
+│      - Remediation steps ranked by confidence         │
+│      - Estimated impact of each action                │
+│                                                       │
+│  [4] Execute (approved actions only)                  │
+│      - Restart pod / flush cache / retry CPI iFlow    │
+│      - Post enriched incident to Slack                │
+└───────────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="ai-use-cases-in-monitoring">AI Use Cases in Monitoring<a class="headerlink" href="#ai-use-cases-in-monitoring" title="Permanent link">&para;</a></h3>
+<h4 id="error-detection-log-analysis">Error Detection — Log Analysis<a class="headerlink" href="#error-detection-log-analysis" title="Permanent link">&para;</a></h4>
+<p>Rather than pattern-matching log lines with regex rules, the AI reads structured log streams and identifies anomalies in context:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">analyse_mdm_error</span><span class="p">(</span><span class="n">alert_context</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># Fetch recent logs from SAP Cloud Logging for the affected service</span>
+    <span class="n">logs</span> <span class="o">=</span> <span class="n">fetch_logs</span><span class="p">(</span><span class="n">service</span><span class="o">=</span><span class="s2">&quot;mdm-core-api&quot;</span><span class="p">,</span> <span class="n">last_minutes</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">aem_stats</span> <span class="o">=</span> <span class="n">fetch_aem_queue_stats</span><span class="p">()</span>
+    <span class="n">cpi_errors</span> <span class="o">=</span> <span class="n">fetch_cpi_error_inbox</span><span class="p">()</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="s2">&quot;claude-opus-4-6&quot;</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span>
+        <span class="n">messages</span><span class="o">=</span><span class="p">[{</span>
+            <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            MDM system alert: </span><span class="si">{</span><span class="n">alert_context</span><span class="p">[</span><span class="s1">&#39;summary&#39;</span><span class="p">]</span><span class="si">}</span>
+
+<span class="s2">            Recent mdm-core-api logs (last 15 min):</span>
+<span class="s2">            </span><span class="si">{</span><span class="n">logs</span><span class="si">}</span>
+
+<span class="s2">            AEM queue stats:</span>
+<span class="s2">            </span><span class="si">{</span><span class="n">aem_stats</span><span class="si">}</span>
+
+<span class="s2">            CPI Error Inbox (last 10 entries):</span>
+<span class="s2">            </span><span class="si">{</span><span class="n">cpi_errors</span><span class="si">}</span>
+
+<span class="s2">            Analyse the root cause. Is this a:</span>
+<span class="s2">            1. Transient infrastructure issue (retry will fix)</span>
+<span class="s2">            2. Data issue (bad payload from lead system)</span>
+<span class="s2">            3. Integration issue (CPI iFlow misconfiguration)</span>
+<span class="s2">            4. Capacity issue (AEM queue backing up)</span>
+
+<span class="s2">            Recommend the single most impactful remediation action.</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+        <span class="p">}]</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+</code></pre></div>
+<h4 id="anomaly-diagnosis-cross-layer-correlation">Anomaly Diagnosis — Cross-Layer Correlation<a class="headerlink" href="#anomaly-diagnosis-cross-layer-correlation" title="Permanent link">&para;</a></h4>
+<p>The AI correlates signals that threshold alerting treats as separate incidents:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Traditional Alerting</th>
+<th>AI Correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MongoDB slow → Redis miss spike → API latency up</td>
+<td>3 separate alerts, 3 separate Slack messages</td>
+<td>Single diagnosis: "MongoDB degradation causing cache bypass — recommend scaling MongoDB or serving stale cache"</td>
+</tr>
+<tr>
+<td>CPI iFlow failure → AEM DLQ growing → consumer not receiving data</td>
+<td>2 alerts, manual investigation</td>
+<td>Single diagnosis: "CPI transform failure due to unexpected null field in S/4HANA payload — recommend adding null check at step 3"</td>
+</tr>
+<tr>
+<td>Scheduler job missed + AEM queue growing</td>
+<td>2 unrelated alerts</td>
+<td>Single diagnosis: "Nightly batch did not drain queue — AEM backlog now 48h of changes — recommend immediate manual trigger of delta job"</td>
+</tr>
+</tbody>
+</table>
+<h4 id="auto-fix-recommendations">Auto-Fix Recommendations<a class="headerlink" href="#auto-fix-recommendations" title="Permanent link">&para;</a></h4>
+<p>AI generates specific, contextual fix steps — not generic runbook instructions:</p>
+<div class="highlight"><pre><span></span><code>Alert: AemDlqMessagePresent — mdm.erp.vendor.scheduled.queue DLQ has 47 messages
+
+AI Analysis:
+Root cause: CPI iFlow MDM_Vendor_To_ERP_NightlyBatch failed on 47 messages.
+Examining CPI error logs: &quot;IDoc CREMAS05 segment E1LFM1M field LIFNR exceeds
+10 characters — source vendor ID &#39;VEND-EXTERNAL-01234&#39; is 18 chars.&quot;
+
+Recommended fix (confidence: 94%):
+1. Update CPI iFlow step 6 Groovy script to truncate LIFNR to 10 chars
+   or map to a validated internal ERP vendor ID
+2. Retry failed messages from CPI Error Inbox after fix is deployed
+3. Add input validation in MDM Consumer Registry to reject vendor IDs &gt; 10 chars
+
+Estimated time to resolve: 30 minutes
+Impact if unresolved: ERP vendor master will not receive 47 vendor updates
+</code></pre></div>
+<h4 id="self-healing-loop">Self-Healing Loop<a class="headerlink" href="#self-healing-loop" title="Permanent link">&para;</a></h4>
+<p>For pre-approved, low-risk actions, the AI agent executes without waiting for human approval:</p>
+<div class="highlight"><pre><span></span><code><span class="n">APPROVED_AUTO_ACTIONS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;restart_pod&quot;</span><span class="p">,</span>           <span class="c1"># pod crash-loop with known pattern</span>
+    <span class="s2">&quot;flush_redis_cache&quot;</span><span class="p">,</span>     <span class="c1"># cache inconsistency confirmed by AI</span>
+    <span class="s2">&quot;retry_cpi_messages&quot;</span><span class="p">,</span>    <span class="c1"># transient 5xx, payload unchanged</span>
+<span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">self_healing_loop</span><span class="p">(</span><span class="n">alert</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+    <span class="n">analysis</span> <span class="o">=</span> <span class="n">analyse_mdm_error</span><span class="p">(</span><span class="n">alert</span><span class="p">)</span>
+    <span class="n">action</span> <span class="o">=</span> <span class="n">extract_recommended_action</span><span class="p">(</span><span class="n">analysis</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">APPROVED_AUTO_ACTIONS</span> <span class="ow">and</span> <span class="n">action</span><span class="p">[</span><span class="s2">&quot;confidence&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.90</span><span class="p">:</span>
+        <span class="n">execute_action</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="n">notify_slack</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Auto-resolved: </span><span class="si">{</span><span class="n">action</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">AI analysis: </span><span class="si">{</span><span class="n">analysis</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Escalate to human with full AI context</span>
+        <span class="n">notify_pagerduty</span><span class="p">(</span><span class="n">alert</span><span class="p">,</span> <span class="n">ai_context</span><span class="o">=</span><span class="n">analysis</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="3-cost-economics-token-model">3. Cost Economics — Token Model<a class="headerlink" href="#3-cost-economics-token-model" title="Permanent link">&para;</a></h2>
+<p>Pricing based on Claude API (claude-opus-4-6) as of 2025: <strong>$15 / 1M input tokens, $75 / 1M output tokens</strong>.</p>
+<h3 id="development-phase-feature-generation-costs">Development Phase — Feature Generation Costs<a class="headerlink" href="#development-phase-feature-generation-costs" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>AI Task</th>
+<th>Est. Input Tokens</th>
+<th>Est. Output Tokens</th>
+<th>Cost per Task</th>
+<th>Tasks per Project</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Schema definition (one object type)</td>
+<td>2,000</td>
+<td>1,500</td>
+<td>~$0.14</td>
+<td>20 → <strong>$2.80</strong></td>
+</tr>
+<tr>
+<td>CPI iFlow Groovy script</td>
+<td>1,500</td>
+<td>3,000</td>
+<td>~$0.25</td>
+<td>15 → <strong>$3.75</strong></td>
+</tr>
+<tr>
+<td>Spring Boot service stub</td>
+<td>1,000</td>
+<td>4,000</td>
+<td>~$0.32</td>
+<td>10 → <strong>$3.20</strong></td>
+</tr>
+<tr>
+<td>Unit test generation (per service)</td>
+<td>2,000</td>
+<td>5,000</td>
+<td>~$0.41</td>
+<td>10 → <strong>$4.10</strong></td>
+</tr>
+<tr>
+<td>Prometheus alert rules (full set)</td>
+<td>1,000</td>
+<td>2,000</td>
+<td>~$0.18</td>
+<td>1 → <strong>$0.18</strong></td>
+</tr>
+<tr>
+<td>xs-security.json RBAC definition</td>
+<td>800</td>
+<td>1,200</td>
+<td>~$0.10</td>
+<td>1 → <strong>$0.10</strong></td>
+</tr>
+<tr>
+<td><strong>Total AI development cost</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td><strong>~$14</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition success">
+<p class="admonition-title">Development ROI</p>
+<p>Generating ~$14 of API calls replaces an estimated 8–12 person-days of boilerplate authoring. At a fully-loaded developer rate of $800/day that is <strong>$6,400–$9,600 of saved effort</strong> for $14 of API cost.</p>
+</div>
+<h3 id="operations-phase-monitoring-cost-per-event">Operations Phase — Monitoring Cost per Event<a class="headerlink" href="#operations-phase-monitoring-cost-per-event" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>AI Monitoring Task</th>
+<th>Est. Input Tokens</th>
+<th>Est. Output Tokens</th>
+<th>Cost per Event</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Error log analysis (15 min logs + context)</td>
+<td>8,000</td>
+<td>800</td>
+<td>~$0.18</td>
+</tr>
+<tr>
+<td>Anomaly diagnosis (metrics + logs)</td>
+<td>6,000</td>
+<td>1,000</td>
+<td>~$0.17</td>
+</tr>
+<tr>
+<td>Root cause + fix recommendation</td>
+<td>10,000</td>
+<td>1,500</td>
+<td>~$0.26</td>
+</tr>
+<tr>
+<td>Self-healing decision (low-risk action)</td>
+<td>4,000</td>
+<td>400</td>
+<td>~$0.09</td>
+</tr>
+</tbody>
+</table>
+<h4 id="monthly-operations-cost-model">Monthly Operations Cost Model<a class="headerlink" href="#monthly-operations-cost-model" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Events/day</th>
+<th>AI calls/event</th>
+<th>Cost/month</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Low activity</strong> — stable system, few alerts</td>
+<td>5</td>
+<td>2</td>
+<td>~$1.60</td>
+</tr>
+<tr>
+<td><strong>Normal operations</strong> — typical alert volume</td>
+<td>20</td>
+<td>2</td>
+<td>~$6.40</td>
+</tr>
+<tr>
+<td><strong>Incident day</strong> — major degradation</td>
+<td>100</td>
+<td>3</td>
+<td>~$24 per incident</td>
+</tr>
+<tr>
+<td><strong>Full autonomous ops</strong> — all log anomalies analysed</td>
+<td>500</td>
+<td>1</td>
+<td>~$80/month</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Cost vs Value</p>
+<p>At $80/month for full autonomous log analysis, a single incident that AI diagnoses in 5 minutes instead of a developer spending 2 hours represents $250+ of saved on-call time — the monthly AI cost is recovered in one incident.</p>
+</div>
+<h3 id="token-optimisation-strategies">Token Optimisation Strategies<a class="headerlink" href="#token-optimisation-strategies" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Token Savings</th>
+<th>Trade-off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Use <code>claude-haiku-4-5</code> for high-volume, low-complexity log triage</td>
+<td>~90% cost reduction</td>
+<td>Lower reasoning quality for complex incidents</td>
+</tr>
+<tr>
+<td>Pre-filter logs before sending to AI (send only ERROR/WARN lines)</td>
+<td>60–80% input reduction</td>
+<td>May miss context from INFO logs</td>
+</tr>
+<tr>
+<td>Cache AI analysis for identical alert signatures</td>
+<td>Skip duplicate calls</td>
+<td>Stale analysis if system state changed</td>
+</tr>
+<tr>
+<td>Limit log window to 5 min (not 15) for transient alerts</td>
+<td>~60% input reduction</td>
+<td>May miss slow-developing issues</td>
+</tr>
+<tr>
+<td>Use <code>claude-sonnet-4-6</code> for root cause, <code>haiku-4-5</code> for triage routing</td>
+<td>~70% cost reduction</td>
+<td>Two-tier pipeline adds latency</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recommended tiered model:</strong></p>
+<div class="highlight"><pre><span></span><code>Alert fires
+    │
+    ▼ Haiku-4.5 triage ($0.02/call)
+    ├── &quot;Transient / known pattern&quot; → auto-retry, no escalation
+    ├── &quot;Unknown / complex&quot;        → Opus-4.6 deep analysis ($0.26/call)
+    └── &quot;Critical / data loss&quot;     → Opus-4.6 + immediate page
+</code></pre></div>
+<hr />
+<h2 id="4-build-vs-buy">4. Build vs Buy<a class="headerlink" href="#4-build-vs-buy" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>When to Use</th>
+<th>Indicative Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Claude API directly</strong> (as above)</td>
+<td>Full control, MDM-specific context, custom self-healing logic</td>
+<td>~$80–200/month ops</td>
+</tr>
+<tr>
+<td><strong>Grafana Sift</strong> (AI in Grafana Cloud)</td>
+<td>Already on Grafana Cloud, want AI in existing dashboards</td>
+<td>Grafana Cloud pricing</td>
+</tr>
+<tr>
+<td><strong>Dynatrace Davis AI</strong></td>
+<td>Large enterprise, broad APM needed beyond MDM, budget available</td>
+<td>$$$$</td>
+</tr>
+<tr>
+<td><strong>Azure Monitor AI</strong> (if on AKS)</td>
+<td>AKS deployment, Azure ecosystem</td>
+<td>Azure pricing</td>
+</tr>
+<tr>
+<td><strong>SAP AI Core</strong> (if on BTP)</td>
+<td>BTP-native, SAP ecosystem, want managed LLM on BTP</td>
+<td>BTP credits</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recommendation for SierraDock MDM on BTP Kyma:</strong> Use Claude API directly for the first 12 months. The MDM context (AEM queues, CPI iFlows, MongoDB Change Streams) is specific enough that pre-built AI monitoring platforms will require significant configuration to match. Direct API use gives full control at minimal cost, and the prompts built during this phase become reusable assets.</p>
+<p>At scale (&gt;10 sites, &gt;50 object types), evaluate <strong>SAP AI Core</strong> for BTP-native hosting of the AI monitoring agent — it removes external API dependency and can be bound as a BTP service instance to the Kyma deployment.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

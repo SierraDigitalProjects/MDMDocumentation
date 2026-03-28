@@ -1,0 +1,2312 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Sierra MDM Platform — Architecture and Requirements">
+      
+      
+        <meta name="author" content="Sierra MDM Team">
+      
+      
+      
+        <link rel="prev" href="../../inventory/not-in-sap/">
+      
+      
+        <link rel="next" href="../non-functional/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Functional Requirements - Sierra MDM Platform</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#functional-requirements" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sierra MDM Platform" class="md-header__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sierra MDM Platform
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Functional Requirements
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sierra MDM Platform" class="md-nav__button md-logo" aria-label="Sierra MDM Platform" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Sierra MDM Platform
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../goals-objectives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Goals & Objectives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benefits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benefits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../assumptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assumptions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scope
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scope
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Master Data Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/centrally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Centrally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/locally-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Locally Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../inventory/not-in-sap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Not Managed in SAP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Requirements
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Requirements
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fr-01-master-data-object-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-01 — Master Data Object Support
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-02-lead-system-and-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-02 — Lead System and Replication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-03-match-and-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-03 — Match and Merge
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-04-workflow-and-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-04 — Workflow and Approval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-05-role-based-access-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-05 — Role-Based Access Control
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-06-data-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-06 — Data Quality
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-07-search-and-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-07 — Search and Discovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-08-audit-and-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-08 — Audit and History
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-09-data-enrichment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-09 — Data Enrichment
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../non-functional/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Non-Functional Requirements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../open-questions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Open Questions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_1" id="__nav_7_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MDM Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    MDM Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/lead-system-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lead System Strategy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/integration-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integration Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rbac-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RBAC and Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/data-enrichment-governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Enrichment Governance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_7_2" id="__nav_7_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_7_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Technical Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/compute-options/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Compute Options (Kyma vs AKS)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/event-broker/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Broker (AEM vs Kafka)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../technical-architecture/data-layer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Layer (MongoDB & Redis)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/monitoring/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autonomous Monitoring
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/cost/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cost of Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI in MDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Code Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Code Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/spring-boot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spring Boot (MDM Core API)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/cpi-iflows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CPI iFlows & Groovy Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../code-reference/kubernetes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kubernetes & Kyma Manifests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Project Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#fr-01-master-data-object-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-01 — Master Data Object Support
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-02-lead-system-and-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-02 — Lead System and Replication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-03-match-and-merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-03 — Match and Merge
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-04-workflow-and-approval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-04 — Workflow and Approval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-05-role-based-access-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-05 — Role-Based Access Control
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-06-data-quality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-06 — Data Quality
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-07-search-and-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-07 — Search and Discovery
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-08-audit-and-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-08 — Audit and History
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fr-09-data-enrichment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FR-09 — Data Enrichment
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="functional-requirements">Functional Requirements<a class="headerlink" href="#functional-requirements" title="Permanent link">&para;</a></h1>
+<p>Requirements are tagged with the management tier they apply to:
+<code>[C]</code> = Centrally Managed | <code>[L]</code> = Locally Managed | <code>[M]</code> = MDM Lead System | <code>[ALL]</code> = All tiers</p>
+<hr />
+<h2 id="fr-01-master-data-object-support">FR-01 — Master Data Object Support<a class="headerlink" href="#fr-01-master-data-object-support" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Tier</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-01.1</td>
+<td>MDM must support all 83 master data objects identified in the inventory</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-01.2</td>
+<td>MDM must support the full attribute set for each object as defined in SAP S/4HANA where applicable</td>
+<td>C, L</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-01.3</td>
+<td>MDM must support custom attributes for non-SAP objects (CRM, EH&amp;S, HR) not defined in SAP</td>
+<td>M</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-01.4</td>
+<td>MDM must allow attribute schema extension without platform upgrade</td>
+<td>ALL</td>
+<td>Should Have</td>
+</tr>
+<tr>
+<td>FR-01.5</td>
+<td>MDM must support object versioning — every change creates a new version, previous versions are retained</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fr-02-lead-system-and-replication">FR-02 — Lead System and Replication<a class="headerlink" href="#fr-02-lead-system-and-replication" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Tier</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-02.1</td>
+<td>MDM must receive inbound replication from SAP S/4HANA for all centrally managed objects</td>
+<td>C</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-02.2</td>
+<td>MDM must receive inbound replication from SAP S/4HANA for all locally managed objects, tagged with site identifier</td>
+<td>L</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-02.3</td>
+<td>MDM must publish approved records to downstream systems for MDM-lead objects</td>
+<td>M</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-02.4</td>
+<td>Replication must be near-real-time (&lt; 5 minutes latency) for create/update events on critical objects (Material Master, Business Partner, Equipment)</td>
+<td>C, L</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-02.5</td>
+<td>Replication must support both full-load (initial migration) and delta-load (ongoing sync) modes</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-02.6</td>
+<td>MDM must maintain a replication status indicator per object showing last sync time and status</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fr-03-match-and-merge">FR-03 — Match and Merge<a class="headerlink" href="#fr-03-match-and-merge" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Tier</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-03.1</td>
+<td>MDM must apply deterministic matching before probabilistic matching for all inbound records</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-03.2</td>
+<td>MDM must auto-merge records above a configurable high-confidence threshold</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-03.3</td>
+<td>MDM must route potential duplicates below the high-confidence threshold to a manual review queue</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-03.4</td>
+<td>The Business Partner object must support cross-domain matching (CRM Prospect vs. SAP Customer vs. SAP Vendor)</td>
+<td>M, C</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-03.5</td>
+<td>MDM must support survivor rules — configuring which source system's attribute value "wins" in a merge</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-03.6</td>
+<td>Merged records must retain links to all source system IDs (cross-reference table)</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fr-04-workflow-and-approval">FR-04 — Workflow and Approval<a class="headerlink" href="#fr-04-workflow-and-approval" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Tier</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-04.1</td>
+<td>All new record creation must go through a configurable approval workflow before becoming a golden record</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-04.2</td>
+<td>All updates to existing golden records must go through approval workflow</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-04.3</td>
+<td>Approval workflows must be configurable per object type (different approvers for Material Master vs. Customer)</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-04.4</td>
+<td>MDM must support multi-step approval chains (e.g., steward review → lead approval)</td>
+<td>ALL</td>
+<td>Should Have</td>
+</tr>
+<tr>
+<td>FR-04.5</td>
+<td>Workflow tasks must be accessible via email notification with approve/reject links</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-04.6</td>
+<td>Approval escalation must trigger automatically if a task is not actioned within a configurable time window</td>
+<td>ALL</td>
+<td>Should Have</td>
+</tr>
+<tr>
+<td>FR-04.7</td>
+<td>Emergency bypass must be available for urgent records, with mandatory audit justification</td>
+<td>ALL</td>
+<td>Should Have</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fr-05-role-based-access-control">FR-05 — Role-Based Access Control<a class="headerlink" href="#fr-05-role-based-access-control" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Tier</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-05.1</td>
+<td>MDM must enforce site-scoped write permissions for all locally managed objects</td>
+<td>L</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-05.2</td>
+<td>Site Data Coordinators must be unable to create or modify records owned by a different site</td>
+<td>L</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-05.3</td>
+<td>All authenticated users must be able to read all approved golden records regardless of site</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-05.4</td>
+<td>Role assignments must be manageable by MDM Platform Admins without vendor support</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-05.5</td>
+<td>MDM must integrate with the enterprise Identity Provider (IdP) for SSO authentication</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-05.6</td>
+<td>Service accounts for system integrations must have minimal privilege (object-type specific)</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fr-06-data-quality">FR-06 — Data Quality<a class="headerlink" href="#fr-06-data-quality" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Tier</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-06.1</td>
+<td>MDM must enforce configurable validation rules per object type</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-06.2</td>
+<td>Validation errors must block record approval (not just warn) for Error-severity rules</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-06.3</td>
+<td>MDM must produce a data quality score per golden record based on completeness, validity, and uniqueness</td>
+<td>ALL</td>
+<td>Should Have</td>
+</tr>
+<tr>
+<td>FR-06.4</td>
+<td>MDM must provide a data quality dashboard showing scores by object type and module</td>
+<td>ALL</td>
+<td>Should Have</td>
+</tr>
+<tr>
+<td>FR-06.5</td>
+<td>Reference data (material groups, GL account groups, etc.) must be maintained within MDM and used for validation</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fr-07-search-and-discovery">FR-07 — Search and Discovery<a class="headerlink" href="#fr-07-search-and-discovery" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Tier</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-07.1</td>
+<td>MDM must provide full-text search across all golden records</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-07.2</td>
+<td>Search must support filtering by object type, module, site, management tier, and status</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-07.3</td>
+<td>MDM must expose a REST API for programmatic record lookup by consumers</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-07.4</td>
+<td>API must support search by source system ID (e.g., SAP Material Number, Salesforce Account ID)</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fr-08-audit-and-history">FR-08 — Audit and History<a class="headerlink" href="#fr-08-audit-and-history" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Tier</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-08.1</td>
+<td>Every change to a golden record must be logged with user, timestamp, old value, and new value</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-08.2</td>
+<td>Complete approval chain must be stored with each record version</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-08.3</td>
+<td>Audit log must be immutable — no user, including Platform Admin, can delete or modify log entries</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-08.4</td>
+<td>Audit log must be exportable for compliance reporting</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="fr-09-data-enrichment">FR-09 — Data Enrichment<a class="headerlink" href="#fr-09-data-enrichment" title="Permanent link">&para;</a></h2>
+<p>Requirements for governing how satellite systems, stewards, and third-party providers enrich master data objects with additional attributes beyond what the lead system provides.</p>
+<p>For the solution design, see <a href="../../architecture/data-enrichment-governance/">Data Enrichment Governance</a>.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Tier</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-09.1</td>
+<td>Any satellite system must be able to add its own extension attributes to a shared MDM object without modifying the core object schema</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.2</td>
+<td>Extension attributes must be isolated per satellite system in a named namespace — one system cannot read or write another system's namespace without explicit scope grant</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.3</td>
+<td>A satellite system must register its extension namespace (field names, types, update frequency) before being permitted to write to it</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.4</td>
+<td>Extension namespace registration must be approved by the Data Steward Lead</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.5</td>
+<td>Each extension field must carry provenance metadata: owning system, last updated timestamp, and source reference</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.6</td>
+<td>Data Stewards must be able to manually enrich core attributes with a justification and source reference, subject to peer review approval</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.7</td>
+<td>MDM must support third-party data providers as enrichment sources, with provider onboarding governed by the data governance committee</td>
+<td>ALL</td>
+<td>Should Have</td>
+</tr>
+<tr>
+<td>FR-09.8</td>
+<td>MDM must support computed / derived fields that are automatically recalculated when source fields change, and are read-only to all external systems</td>
+<td>ALL</td>
+<td>Should Have</td>
+</tr>
+<tr>
+<td>FR-09.9</td>
+<td>Consumers must be able to discover available extension namespaces per object type via the Schema Definition API, including field list, owner, and update frequency</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.10</td>
+<td>Consumers must be able to register interest in extension fields and receive events only when those specific extension fields change</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.11</td>
+<td>PII fields in extension namespaces must require an elevated access scope and data privacy approval before a consumer can subscribe to them</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.12</td>
+<td>Enrichment conflicts (manual enrichment contradicts lead system value) must be surfaced as a conflict flag for steward resolution, not silently overwritten</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+<tr>
+<td>FR-09.13</td>
+<td>Stale enrichment fields (not updated within the defined threshold) must be flagged and excluded from consumer events until refreshed</td>
+<td>ALL</td>
+<td>Should Have</td>
+</tr>
+<tr>
+<td>FR-09.14</td>
+<td>All enrichment changes must be captured in the immutable audit log with enrichment type, namespace, source system, and source reference</td>
+<td>ALL</td>
+<td>Must Have</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "toc.follow", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
