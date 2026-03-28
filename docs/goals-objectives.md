@@ -2,7 +2,7 @@
 
 ## Strategic Goals
 
-The Sierra MDM Platform is being built to address a fundamental gap in SierraDock's data landscape: **83 master data objects** are managed across 10 SAP functional modules with no single system of record, inconsistent governance, and no event-driven mechanism to keep satellite systems in sync.
+The Sierra Aura is being built to address a fundamental gap in Customer data landscape: **83 master data objects** are managed across 10 SAP functional modules with no single system of record, inconsistent governance, and no event-driven mechanism to keep satellite systems in sync.
 
 The platform targets three strategic outcomes:
 
@@ -53,7 +53,7 @@ The platform targets three strategic outcomes:
 
 ## Success Criteria
 
-The Sierra MDM Platform is considered successful when:
+The Sierra Aura is considered successful when:
 
 1. All 83 master data objects are onboarded with defined ownership (Data Team, Site, or MDM lead)
 2. No satellite system reads master data directly from S/4HANA or CRM — all reads go through MDM API or AEM events

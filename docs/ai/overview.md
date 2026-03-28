@@ -1,6 +1,6 @@
 # AI in MDM — Architecture and Monitoring
 
-AI improves the SierraDock MDM system in two distinct areas: **accelerating development** (reducing the cost and time to build features) and **augmenting autonomous operations** (moving beyond threshold-based alerting to intelligent error detection, root cause analysis, and self-healing).
+AI improves the Sierra Aura system in two distinct areas: **accelerating development** (reducing the cost and time to build features) and **augmenting autonomous operations** (moving beyond threshold-based alerting to intelligent error detection, root cause analysis, and self-healing).
 
 ---
 
@@ -302,6 +302,6 @@ Alert fires
 | **Azure Monitor AI** (if on AKS) | AKS deployment, Azure ecosystem | Azure pricing |
 | **SAP AI Core** (if on BTP) | BTP-native, SAP ecosystem, want managed LLM on BTP | BTP credits |
 
-**Recommendation for SierraDock MDM on BTP Kyma:** Use Claude API directly for the first 12 months. The MDM context (AEM queues, CPI iFlows, MongoDB Change Streams) is specific enough that pre-built AI monitoring platforms will require significant configuration to match. Direct API use gives full control at minimal cost, and the prompts built during this phase become reusable assets.
+**Recommendation for Sierra Aura on BTP Kyma:** Use Claude API directly for the first 12 months. The MDM context (AEM queues, CPI iFlows, MongoDB Change Streams) is specific enough that pre-built AI monitoring platforms will require significant configuration to match. Direct API use gives full control at minimal cost, and the prompts built during this phase become reusable assets.
 
 At scale (>10 sites, >50 object types), evaluate **SAP AI Core** for BTP-native hosting of the AI monitoring agent — it removes external API dependency and can be bound as a BTP service instance to the Kyma deployment.

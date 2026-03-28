@@ -1,6 +1,6 @@
 # Cost of Operations
 
-This page models the ongoing operational cost of running the Sierra MDM Platform on BTP Kyma. All figures are estimates — actual costs depend on usage volume, BTP contract terms, and selected service plans.
+This page models the ongoing operational cost of running the Sierra Aura on BTP Kyma. All figures are estimates — actual costs depend on usage volume, BTP contract terms, and selected service plans.
 
 ---
 

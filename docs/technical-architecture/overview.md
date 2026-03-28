@@ -2,7 +2,7 @@
 
 ## Architecture Pattern
 
-The SierraDock MDM solution follows a **microservices + event-driven architecture**. Every master data change is propagated to satellite systems via an event broker, with configurable delivery schedules per consumer and field-level filtering to avoid unnecessary fan-out.
+The Sierra Aura solution follows a **microservices + event-driven architecture**. Every master data change is propagated to satellite systems via an event broker, with configurable delivery schedules per consumer and field-level filtering to avoid unnecessary fan-out.
 
 ```
 Lead Systems (S4HANA, CRM, Workday, etc.)

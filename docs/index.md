@@ -1,4 +1,4 @@
-# Sierra MDM Platform — Architecture & Requirements
+# Sierra Aura — Architecture & Requirements
 
 ## Executive Summary
 
