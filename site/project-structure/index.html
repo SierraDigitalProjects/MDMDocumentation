@@ -1538,6 +1538,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#reader-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reader Journey
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#modules-sap-functional-areas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1674,6 +1685,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#reader-journey" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reader Journey
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#modules-sap-functional-areas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1772,20 +1794,38 @@
     ├── mkdocs.yml                          # Site configuration and navigation
     └── docs/
         ├── index.md                        # Home page / executive summary
+        ├── goals-objectives.md             # Strategic goals and delivery phases
+        ├── benefits.md                     # Business, technical, and cost benefits
+        ├── assumptions.md                  # Project assumptions and risks
         ├── project-structure.md            # This page
         ├── inventory/                      # Master data object catalogue
-        │   ├── overview.md
-        │   ├── centrally-managed.md
-        │   ├── locally-managed.md
-        │   └── not-in-sap.md
-        ├── architecture/                   # Architecture decisions and patterns
-        │   ├── lead-system-strategy.md
-        │   ├── integration-patterns.md
-        │   └── rbac-governance.md
-        └── requirements/                   # Functional and non-functional requirements
-            ├── functional.md
-            ├── non-functional.md
-            └── open-questions.md
+        │   ├── overview.md                 # 83-object inventory summary and tier counts
+        │   ├── centrally-managed.md        # SAP-managed, Data Team governed
+        │   ├── locally-managed.md          # SAP-managed, site-scoped
+        │   └── not-in-sap.md              # MDM as lead system (CRM, EH&amp;S, HR)
+        ├── requirements/                   # Functional and non-functional requirements
+        │   ├── functional.md               # FR-01 through FR-09 (incl. enrichment governance)
+        │   ├── non-functional.md           # NFR-01 through NFR-07
+        │   └── open-questions.md           # Outstanding decisions and owners
+        ├── architecture/                   # MDM architecture decisions and governance
+        │   ├── lead-system-strategy.md     # Three-tier lead system model
+        │   ├── integration-patterns.md     # CPI iFlow patterns and AEM topic design
+        │   ├── rbac-governance.md          # XSUAA scopes, roles, and site isolation
+        │   └── data-enrichment-governance.md  # Enrichment types, namespace model, workflows
+        ├── technical-architecture/         # Platform and infrastructure design
+        │   ├── overview.md                 # Full stack diagram and component responsibilities
+        │   ├── compute-options.md          # BTP Kyma vs AKS comparison
+        │   ├── event-broker.md             # AEM vs Kafka, effort reduction, recommendation
+        │   └── data-layer.md               # MongoDB schema design, Redis caching, Change Streams
+        ├── operations/                     # Ongoing platform operations
+        │   ├── monitoring.md               # Autonomous monitoring — alerts, KEDA, Robusta runbooks
+        │   └── cost.md                     # Infrastructure cost model and people costs
+        ├── ai/
+        │   └── overview.md                 # AI in architecture and monitoring, token cost model
+        └── code-reference/                 # Implementation guides and code patterns
+            ├── spring-boot.md              # MDM Core API — Spring Boot 3.x patterns
+            ├── cpi-iflows.md               # CPI iFlow structure and Groovy scripts
+            └── kubernetes.md               # Kyma manifests, KEDA scalers, Robusta runbooks
 </code></pre></div>
 <hr />
 <h2 id="sections">Sections<a class="headerlink" href="#sections" title="Permanent link">&para;</a></h2>
@@ -1793,7 +1833,7 @@
 <thead>
 <tr>
 <th>Section</th>
-<th>Folder</th>
+<th>Folder / File</th>
 <th>Purpose</th>
 <th>Audience</th>
 </tr>
@@ -1801,36 +1841,91 @@
 <tbody>
 <tr>
 <td><strong>Home</strong></td>
-<td><code>docs/index.md</code></td>
-<td>Executive summary, scope, modules in scope, document owners</td>
+<td><code>index.md</code></td>
+<td>Executive summary, 3-tier model, modules in scope, document owners</td>
 <td>All stakeholders</td>
 </tr>
 <tr>
-<td><strong>Project Structure</strong></td>
-<td><code>docs/project-structure.md</code></td>
-<td>How this documentation site is organised and how to contribute</td>
-<td>Contributors</td>
+<td><strong>Goals &amp; Objectives</strong></td>
+<td><code>goals-objectives.md</code></td>
+<td>Strategic goals, business and technical objectives (BO/TO), 5-phase delivery plan, success criteria</td>
+<td>Programme Sponsors, MDM Architect</td>
 </tr>
 <tr>
-<td><strong>Master Data Inventory</strong></td>
-<td><code>docs/inventory/</code></td>
-<td>Full catalogue of all 83 master data objects, classified by management tier</td>
+<td><strong>Benefits</strong></td>
+<td><code>benefits.md</code></td>
+<td>Business, technical, and cost benefits; integration cost reduction; risk reduction</td>
+<td>Programme Sponsors, Finance</td>
+</tr>
+<tr>
+<td><strong>Assumptions</strong></td>
+<td><code>assumptions.md</code></td>
+<td>Business, technical, data, and organisational assumptions with impact-if-wrong analysis</td>
+<td>All stakeholders</td>
+</tr>
+<tr>
+<td><strong>Scope — Master Data Inventory</strong></td>
+<td><code>inventory/</code></td>
+<td>Full catalogue of all 83 master data objects classified by management tier and SAP module</td>
 <td>Data Team, Functional Leads</td>
 </tr>
 <tr>
-<td><strong>Architecture Considerations</strong></td>
-<td><code>docs/architecture/</code></td>
-<td>Lead system decisions, CPI integration patterns, RBAC and governance model</td>
-<td>MDM Architect, Integration Team</td>
+<td><strong>Requirements</strong></td>
+<td><code>requirements/</code></td>
+<td>Functional requirements (FR-01–FR-09), non-functional requirements (NFR-01–NFR-07), and open questions log</td>
+<td>MDM Architect, Business Sponsors</td>
 </tr>
 <tr>
-<td><strong>Requirements</strong></td>
-<td><code>docs/requirements/</code></td>
-<td>Functional requirements, non-functional requirements, and open questions log</td>
-<td>MDM Architect, Business Sponsors</td>
+<td><strong>MDM Architecture</strong></td>
+<td><code>architecture/</code></td>
+<td>Lead system strategy, CPI integration patterns, RBAC and governance, data enrichment governance</td>
+<td>MDM Architect, Integration Team, Data Governance</td>
+</tr>
+<tr>
+<td><strong>Technical Architecture</strong></td>
+<td><code>technical-architecture/</code></td>
+<td>Platform stack, compute options, event broker selection, data layer design</td>
+<td>MDM Engineer, Platform Architect</td>
+</tr>
+<tr>
+<td><strong>Operations</strong></td>
+<td><code>operations/</code></td>
+<td>Autonomous monitoring configuration, alert rules, auto-remediation, and full cost of operations model</td>
+<td>MDM Platform Engineer, Programme Sponsors</td>
+</tr>
+<tr>
+<td><strong>AI in MDM</strong></td>
+<td><code>ai/overview.md</code></td>
+<td>How Claude API is used in architecture assistance and autonomous monitoring; token cost economics</td>
+<td>MDM Architect, MDM Platform Engineer</td>
+</tr>
+<tr>
+<td><strong>Code Reference</strong></td>
+<td><code>code-reference/</code></td>
+<td>Implementation patterns and example code for Spring Boot, CPI iFlows, and Kyma manifests</td>
+<td>MDM Engineer, Integration Developer</td>
+</tr>
+<tr>
+<td><strong>About</strong></td>
+<td><code>project-structure.md</code></td>
+<td>Documentation site layout and contribution guide</td>
+<td>Contributors</td>
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="reader-journey">Reader Journey<a class="headerlink" href="#reader-journey" title="Permanent link">&para;</a></h2>
+<p>The documentation is ordered to support a natural reading flow from business context through to implementation:</p>
+<div class="highlight"><pre><span></span><code>Goals &amp; Objectives    →  why we are building this and what success looks like
+Benefits              →  quantified value and risk reduction
+Assumptions           →  what must hold true for the plan to work
+Scope                 →  which master data objects are in scope and how they are classified
+Requirements          →  what the system must do (functional + non-functional)
+Architecture          →  how the system is designed (MDM model + technical stack)
+Operations            →  how it is run and what it costs
+AI in MDM             →  where AI improves build speed and operational efficiency
+Code Reference        →  how to implement it
+</code></pre></div>
 <hr />
 <h2 id="modules-sap-functional-areas">Modules (SAP Functional Areas)<a class="headerlink" href="#modules-sap-functional-areas" title="Permanent link">&para;</a></h2>
 <p>The inventory and architecture sections are organised around these SAP functional modules:</p>
@@ -1906,11 +2001,13 @@
 </li>
 <li>
 <p>Add it to the <code>nav</code> in <code>mkdocs.yml</code>:</p>
-<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Architecture Considerations</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Lead System Strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture/lead-system-strategy.md</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Integration Patterns</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture/integration-patterns.md</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">RBAC and Governance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture/rbac-governance.md</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">My New Topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture/my-new-topic.md</span><span class="w">   </span><span class="c1"># ← add here</span>
+<div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Architecture</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">MDM Architecture</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Lead System Strategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture/lead-system-strategy.md</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Integration Patterns</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture/integration-patterns.md</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">RBAC and Governance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture/rbac-governance.md</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Data Enrichment Governance</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture/data-enrichment-governance.md</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">My New Topic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">architecture/my-new-topic.md</span><span class="w">   </span><span class="c1"># ← add here</span>
 </code></pre></div>
 </li>
 <li>
@@ -1934,12 +2031,19 @@
 <p>Add the section to <code>mkdocs.yml</code>:</p>
 <div class="highlight"><pre><span></span><code><span class="nt">nav</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Home</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index.md</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Project Structure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">project-structure.md</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Master Data Inventory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Architecture Considerations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Goals &amp; Objectives</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">goals-objectives.md</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Benefits</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">benefits.md</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Assumptions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">assumptions.md</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Scope</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Requirements</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Decision Records</span><span class="p">:</span><span class="w">                                          </span><span class="c1"># ← new section</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Architecture</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Operations</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">AI in MDM</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ai/overview.md</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Code Reference</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Decision Records</span><span class="p">:</span><span class="w">                                           </span><span class="c1"># ← new section</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">MDM Platform Selection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">decisions/adr-001-mdm-platform-selection.md</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">About</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">Project Structure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">project-structure.md</span>
 </code></pre></div>
 </li>
 <li>
