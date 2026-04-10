@@ -63,6 +63,12 @@ nav:
       - Autonomous Monitoring: operations/monitoring.md
       - Cost of Operations: operations/cost.md
   - AI in MDM: ai/overview.md
+  - Data Quality Engine:
+      - Overview: data-quality/overview.md
+      - Rules Framework: data-quality/rules-framework.md
+      - Standardization & Enrichment: data-quality/standardization-enrichment.md
+      - Profiling & Trending: data-quality/profiling.md
+      - API Reference: data-quality/api-reference.md
   - Code Reference:
       - Spring Boot (MDM Core API): code-reference/spring-boot.md
       - CPI iFlows & Groovy Scripts: code-reference/cpi-iflows.md
